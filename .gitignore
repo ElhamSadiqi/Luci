@@ -1,0 +1,9 @@
+# Quickshell logs
+*.log
+*.qslog
+
+# Cache files
+.cache/
+
+# Temporary files
+*.tmp
