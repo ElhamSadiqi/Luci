@@ -2,6 +2,7 @@ import QtQuick
 import "../styles"
 import "../status"
 import "../services"
+import "../managers"
 
 Item {
     implicitWidth: row.implicitWidth
@@ -18,10 +19,10 @@ Item {
         spacing: 10
 
         StatusChip {
-            visible: StatusService.visible
+            visible: StatusManager.visible
 
-            icon: StatusService.icon
-            title: StatusService.title
+            icon: StatusManager.icon
+            title: StatusManager.title
         }
 
         Rectangle {
