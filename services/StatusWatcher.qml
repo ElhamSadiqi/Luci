@@ -32,13 +32,63 @@ Item {
 
             var parts = data.split("|")
 
-            if (parts.length !== 3)
+            if (parts.length !== 2)
                 return
 
-            StatusManager.show({
-                icon: parts[1],
-                title: parts[2]
-            })
+            var type = parts[0]
+            var value = parts[1]
+
+            if (type === "volume") {
+
+                if (value === "muted") {
+
+                    StatusManager.show({
+                        icon: "󰝟",
+                        title: "Muted"
+                    })
+
+                    return
+                }
+
+                var volume = Number(value)
+
+                var icon
+
+                if (volume === 0)
+                    icon = "󰝟"
+                else if (volume < 30)
+                    icon = "󰕿"
+                else if (volume < 50)
+                    icon = "󰖀"
+                else if (volume < 70)
+                    icon = "󰕾"
+                else
+                    icon = ""
+
+                StatusManager.show({
+                    icon: icon,
+                    title: volume + "%"
+                })
+            }
+
+            else if (type === "brightness") {
+
+                var brightness = Number(value)
+
+                var icon
+
+                if (brightness < 25)
+                    icon = "󰃞"
+                else if (brightness < 60)
+                    icon = "󰃟"
+                else
+                    icon = "󰃠"
+
+                StatusManager.show({
+                    icon: icon,
+                    title: brightness + "%"
+                })
+            }
         }
     }
 }
