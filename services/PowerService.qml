@@ -9,17 +9,12 @@ Singleton {
 
     Process {
         id: commandProcess
-
-        onExited: function(exitCode, exitStatus) {
-            console.log("Exited:", exitCode)
-        }
     }
 
     function run(cmd) {
         commandProcess.command = cmd
         commandProcess.running = true
     }
-
 
     function lock() {
         run([
@@ -28,27 +23,32 @@ Singleton {
         ])
     }
 
+    function logout() {
+        run([
+            "hyprctl",
+            "dispatch",
+            "exit"
+        ])
+    }
 
     function suspend() {
-        run(
-            ["systemctl", "suspend"],
-            []
-        )
+        run([
+            "systemctl",
+            "suspend"
+        ])
     }
-
 
     function reboot() {
-        run(
-            ["systemctl", "reboot"],
-            []
-        )
+        run([
+            "systemctl",
+            "reboot"
+        ])
     }
 
-
     function poweroff() {
-        run(
-            ["systemctl", "poweroff"],
-            []
-        )
+        run([
+            "systemctl",
+            "poweroff"
+        ])
     }
 }

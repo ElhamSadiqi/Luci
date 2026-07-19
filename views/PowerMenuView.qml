@@ -4,17 +4,9 @@ import "../services"
 
 Item {
 
-    implicitWidth: row.implicitWidth
-    implicitHeight: row.implicitHeight
-
-
     Row {
-        id: row
-
         anchors.centerIn: parent
-
         spacing: 8
-
 
         PowerOption {
             icon: "󰌾"
@@ -25,21 +17,25 @@ Item {
         PowerOption {
             icon: "󰤄"
             title: "Sleep"
+            action: PowerService.suspend
         }
 
         PowerOption {
             icon: "󰍃"
             title: "Logout"
+            action: PowerService.logout
         }
 
         PowerOption {
             icon: "󰑐"
             title: "Reboot"
+            action: PowerService.reboot
         }
 
         PowerOption {
             icon: ""
             title: "Power"
+            action: PowerService.poweroff
         }
     }
 }
