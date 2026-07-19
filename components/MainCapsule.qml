@@ -3,6 +3,7 @@ import "../views"
 import "../widgets"
 import "../styles"
 import "../services"
+import "../managers"
 
 Rectangle {
     id: root
@@ -13,8 +14,26 @@ Rectangle {
     radius: 23
     color: "#000000"
 
-    implicitWidth: expanded ? 520 : 160
-    implicitHeight: expanded ? 75 : 33
+    implicitWidth: {
+        if (root.expanded)
+            return 520
+
+        if (StatusManager.visible)
+            return 300    // we'll tweak this later
+
+        return 160
+    }
+
+    implicitHeight: {
+        if (root.expanded)
+            return 75
+
+        if (StatusManager.visible)
+            return 33    // tweak later
+
+        return 33
+    }
+
 
     Behavior on implicitWidth {
         NumberAnimation {
@@ -96,13 +115,20 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter   
     }
 
-    CenterSection {
-        id: centerSection
+    Loader {
+        id: centerLoader
 
-        expanded: root.expanded
+        anchors.centerIn: parent
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        sourceComponent: {
+            if (root.expanded)
+                return expandedView
+
+            if (StatusManager.visible)
+                return overlayView
+
+            return defaultView
+        }
     }
 
     RightSection {
@@ -113,5 +139,23 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: Theme.capsulePadding
         anchors.verticalCenter: parent.verticalCenter
+    }
+
+    Component {
+        id: defaultView
+
+        DefaultView { }
+    }
+
+    Component {
+        id: overlayView
+
+        OverlayView { }
+    }
+
+    Component {
+        id: expandedView
+
+        ExpandedView { }
     }
 }

@@ -20,10 +20,6 @@ Item {
             readEvent()
         }
 
-        Component.onCompleted: {
-            readEvent()
-        }
-
         function readEvent() {
             var data = text().trim()
 
@@ -36,57 +32,59 @@ Item {
                 return
 
             var type = parts[0]
-            var value = parts[1]
+            var value = Number(parts[1])
 
             if (type === "volume") {
 
-                if (value === "muted") {
+                if (value === -1) {
 
                     StatusManager.show({
+                        mode: "volume",
                         icon: "󰝟",
-                        title: "Muted"
+                        title: "Muted",
+                        value: -1
                     })
 
                     return
                 }
 
-                var volume = Number(value)
-
                 var icon
 
-                if (volume === 0)
+                if (value === 0)
                     icon = "󰝟"
-                else if (volume < 30)
+                else if (value < 30)
                     icon = "󰕿"
-                else if (volume < 50)
+                else if (value < 50)
                     icon = "󰖀"
-                else if (volume < 70)
+                else if (value < 70)
                     icon = "󰕾"
                 else
                     icon = ""
 
                 StatusManager.show({
+                    mode: "volume",
                     icon: icon,
-                    title: volume + "%"
+                    title: value + "%",
+                    value: value
                 })
             }
 
             else if (type === "brightness") {
 
-                var brightness = Number(value)
-
                 var icon
 
-                if (brightness < 25)
+                if (value < 25)
                     icon = "󰃞"
-                else if (brightness < 60)
+                else if (value < 60)
                     icon = "󰃟"
                 else
                     icon = "󰃠"
 
                 StatusManager.show({
+                    mode: "brightness",
                     icon: icon,
-                    title: brightness + "%"
+                    title: value + "%",
+                    value: value
                 })
             }
         }

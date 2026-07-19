@@ -11,6 +11,8 @@ QtObject {
 
     readonly property color icon: "#9CA3AF"
 
+    readonly property color accent: "#E5E7EB"
+
     readonly property int clockSpacing: 2
 
     readonly property int capsuleRadius: 23

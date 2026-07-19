@@ -35,9 +35,7 @@ CACHE_DIR="$HOME/.cache/quickshell/status"
 mkdir -p "$CACHE_DIR"
 
 if [ "$MUTED" -eq 1 ]; then
-    printf "volume|muted\n" > "$CACHE_DIR/event"
+    printf "volume|-1\n" > "$CACHE_DIR/event"
 else
     printf "volume|%s\n" "$VOLUME" > "$CACHE_DIR/event"
 fi
-
-
