@@ -5,7 +5,7 @@ import "services"
 ShellRoot {
 
     StatusWatcher {}
-
+    WorkspaceService {}
     IslandWindow { }
 
 }

@@ -14,12 +14,17 @@ Rectangle {
     radius: 23
     color: "#000000"
 
-    implicitWidth: {
+    width: implicitWidth
+    height: implicitHeight
+
+   implicitWidth: {
         if (root.expanded)
             return 520
 
-        if (StatusManager.visible)
-            return 300    // we'll tweak this later
+        if (StatusManager.visible) {
+            console.log("CAPSULE SIZE:", StatusManager.statusWidth)
+            return StatusManager.statusWidth
+        }
 
         return 160
     }
@@ -29,7 +34,7 @@ Rectangle {
             return 75
 
         if (StatusManager.visible)
-            return 33    // tweak later
+            return StatusManager.statusHeight
 
         return 33
     }
@@ -120,6 +125,9 @@ Rectangle {
 
         anchors.centerIn: parent
 
+        width: item ? item.implicitWidth : 0
+        height: item ? item.implicitHeight : 0
+
         sourceComponent: {
             if (root.expanded)
                 return expandedView
@@ -150,7 +158,9 @@ Rectangle {
     Component {
         id: overlayView
 
-        OverlayView { }
+        OverlayView { 
+            expandedMode: root.expanded
+        }
     }
 
     Component {

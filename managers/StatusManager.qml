@@ -13,17 +13,34 @@ Singleton {
     property string title: ""
     property int value: 0
 
+    property int statusWidth: 160
+    property int statusHeight: 33
+
+
     function show(data) {
+
         mode = data.mode
         icon = data.icon
-        title = data.title 
-        value  = data.value 
+        title = data.title
+        value = data.value
+
+        statusWidth = data.statusWidth ?? 160
+        statusHeight = data.statusHeight ?? 33
 
         visible = true
 
         hideTimer.restart()
-        console.log( "SHOW:",mode,title,value,visible)
+
+        console.log(
+            "SHOW:",
+            mode,
+            title,
+            value,
+            statusWidth,
+            visible
+        )
     }
+
 
     Timer {
         id: hideTimer
@@ -36,5 +53,4 @@ Singleton {
             root.visible = false
         }
     }
-
 }

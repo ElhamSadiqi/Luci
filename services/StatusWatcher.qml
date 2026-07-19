@@ -42,7 +42,9 @@ Item {
                         mode: "volume",
                         icon: "󰝟",
                         title: "Muted",
-                        value: -1
+                        value: -1,
+                        statusWidth: 300,
+                        statusHeight: 33
                     })
 
                     return
@@ -65,7 +67,9 @@ Item {
                     mode: "volume",
                     icon: icon,
                     title: value + "%",
-                    value: value
+                    value: value,
+                    statusWidth: 300,
+                    statusHeight: 33
                 })
             }
 
@@ -84,7 +88,9 @@ Item {
                     mode: "brightness",
                     icon: icon,
                     title: value + "%",
-                    value: value
+                    value: value,
+                    statusWidth: 300,
+                    statusHeight: 33
                 })
             }
         }

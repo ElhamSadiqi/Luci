@@ -6,15 +6,22 @@ import "../managers"
 Item {
     id: root
 
-    implicitWidth: 280
+    property bool expandedMode: false
+
+    implicitWidth: StatusManager.mode === "workspace"
+        ? 120
+        : 280
+
     implicitHeight: 26
 
     property int maximum: 100
+
 
     RowLayout {
         anchors.fill: parent
 
         spacing: 10
+
 
         Text {
             text: StatusManager.icon
@@ -26,16 +33,21 @@ Item {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        Rectangle {
-            id: bar
 
-            Layout.fillWidth: true
+        // Progress bar for volume and brightness only
+        Rectangle {
+            visible:
+                StatusManager.mode === "volume" ||
+                StatusManager.mode === "brightness"
+
+            Layout.fillWidth: visible
             Layout.alignment: Qt.AlignVCenter
 
             height: 6
             radius: height / 2
 
             color: "#2A2A2A"
+
 
             Rectangle {
                 anchors.left: parent.left
@@ -54,6 +66,7 @@ Item {
 
                 color: Theme.accent
 
+
                 Behavior on width {
                     NumberAnimation {
                         duration: 180
@@ -63,7 +76,28 @@ Item {
             }
         }
 
+
         Text {
+            visible: StatusManager.mode === "workspace"
+
+            text: root.expandedMode
+                ? StatusManager.title
+                : "Workspace " + StatusManager.title
+
+            color: Theme.textPrimary
+            font.pixelSize: 13
+            font.weight: Font.Medium
+
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+
+        // Percentage text for volume and brightness
+        Text {
+            visible:
+                StatusManager.mode === "volume" ||
+                StatusManager.mode === "brightness"
+
             text: StatusManager.value >= 0
                   ? StatusManager.value + "%"
                   : "Muted"
