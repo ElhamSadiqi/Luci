@@ -8,7 +8,6 @@ import "../managers"
 Rectangle {
     id: root
 
-    property bool expanded: false
     property bool locked: false
 
     radius: 23
@@ -17,26 +16,49 @@ Rectangle {
     width: implicitWidth
     height: implicitHeight
 
-   implicitWidth: {
-        if (root.expanded)
+    readonly property bool isDefault:
+        IslandManager.mode === IslandManager.defaultMode
+
+    readonly property bool isExpanded:
+        IslandManager.mode === IslandManager.expandedMode
+
+    readonly property bool isPowerMenu:
+        IslandManager.mode === IslandManager.powerMenuMode
+
+    implicitWidth: {
+        switch (IslandManager.mode) {
+
+        case IslandManager.expandedMode:
+        case IslandManager.powerMenuMode:
+        case IslandManager.controlCenterMode:
+        case IslandManager.themeSwitcherMode:
+        case IslandManager.wallpaperSelectorMode:
             return 520
 
-        if (StatusManager.visible) {
-            console.log("CAPSULE SIZE:", StatusManager.statusWidth)
-            return StatusManager.statusWidth
-        }
+        default:
+            if (StatusManager.visible)
+                return StatusManager.statusWidth
 
-        return 160
+            return 160
+        }
     }
 
     implicitHeight: {
-        if (root.expanded)
+        switch (IslandManager.mode) {
+
+        case IslandManager.expandedMode:
+        case IslandManager.powerMenuMode:
+        case IslandManager.controlCenterMode:
+        case IslandManager.themeSwitcherMode:
+        case IslandManager.wallpaperSelectorMode:
             return 75
 
-        if (StatusManager.visible)
-            return StatusManager.statusHeight
+        default:
+            if (StatusManager.visible)
+                return StatusManager.statusHeight
 
-        return 33
+            return 33
+        }
     }
 
 
@@ -58,6 +80,10 @@ Rectangle {
         id: hover
 
         onHoveredChanged: {
+
+            if (IslandManager.modal)
+                return
+
             if (hover.hovered) {
                 collapseTimer.stop()
                 expandTimer.restart()
@@ -74,13 +100,21 @@ Rectangle {
         acceptedButtons: Qt.LeftButton
 
         onTapped: {
+
+            if (IslandManager.modal)
+                return
+
             root.locked = !root.locked
 
             if (root.locked) {
                 expandTimer.stop()
                 collapseTimer.stop()
-                root.expanded = true
+
+                IslandManager.setMode(
+                    IslandManager.expandedMode
+                )
             } else {
+
                 if (!hover.hovered)
                     collapseTimer.restart()
             }
@@ -94,7 +128,13 @@ Rectangle {
         repeat: false
 
         onTriggered: {
-            root.expanded = true
+
+            if (IslandManager.modal)
+                return
+
+            IslandManager.setMode(
+                IslandManager.expandedMode
+            )
         }
     }
 
@@ -105,19 +145,13 @@ Rectangle {
         repeat: false
 
         onTriggered: {
+
+            if (IslandManager.modal)
+                return
+
             if (!root.locked)
-                root.expanded = false
+                IslandManager.reset()
         }
-    }
-
-    LeftSection {
-        id: leftSection
-
-        visible: root.expanded
-
-        anchors.left: parent.left
-        anchors.leftMargin: Theme.capsulePadding
-        anchors.verticalCenter: parent.verticalCenter   
     }
 
     Loader {
@@ -129,24 +163,34 @@ Rectangle {
         height: item ? item.implicitHeight : 0
 
         sourceComponent: {
-            if (root.expanded)
-                return expandedView
 
-            if (StatusManager.visible)
+            if (
+                IslandManager.mode === IslandManager.defaultMode &&
+                StatusManager.visible
+            )
                 return overlayView
 
-            return defaultView
+            switch (IslandManager.mode) {
+
+            case IslandManager.expandedMode:
+                return expandedView
+
+            case IslandManager.powerMenuMode:
+                return powerMenuView
+
+            case IslandManager.controlCenterMode:
+                return controlCenterView
+
+            case IslandManager.themeSwitcherMode:
+                return themeSwitcherView
+
+            case IslandManager.wallpaperSelectorMode:
+                return wallpaperSelectorView
+
+            default:
+                return defaultView
+            }
         }
-    }
-
-    RightSection {
-        id: rightSection
-
-        visible: root.expanded
-
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.capsulePadding
-        anchors.verticalCenter: parent.verticalCenter
     }
 
     Component {
@@ -158,14 +202,36 @@ Rectangle {
     Component {
         id: overlayView
 
-        OverlayView { 
-            expandedMode: root.expanded
-        }
+        OverlayView { }
     }
 
     Component {
         id: expandedView
 
         ExpandedView { }
+    }
+
+    Component {
+        id: powerMenuView
+
+        PowerMenuView { }
+    }
+
+    Component {
+        id: controlCenterView
+
+        Item { }
+    }
+
+    Component {
+        id: themeSwitcherView
+
+        Item { }
+    }
+
+    Component {
+        id: wallpaperSelectorView
+
+        Item { }
     }
 }

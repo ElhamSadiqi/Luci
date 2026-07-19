@@ -6,6 +6,8 @@ ShellRoot {
 
     StatusWatcher {}
     WorkspaceService {}
-    IslandWindow { }
 
+    IslandIPC {}
+
+    IslandWindow {}
 }

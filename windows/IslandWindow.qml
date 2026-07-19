@@ -3,6 +3,7 @@ import Quickshell
 import "../components"
 
 PanelWindow {
+
     id: root
 
     anchors {
@@ -13,7 +14,9 @@ PanelWindow {
 
     exclusiveZone: 33
     implicitHeight: 85
+
     color: "transparent"
+
 
     MainCapsule {
         id: capsule
@@ -23,7 +26,13 @@ PanelWindow {
         anchors.topMargin: 10
     }
 
-    mask: Region {
+
+    Region {
+        id: capsuleMask
+
         item: capsule
     }
+
+
+    mask: capsuleMask
 }
