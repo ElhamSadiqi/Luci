@@ -11,10 +11,17 @@ PanelWindow {
     HyprlandFocusGrab {
         id: focusGrab
 
-        active: IslandManager.mode === IslandManager.powerMenuMode
+        active: IslandManager.modal
+
         windows: [ root ]
 
+        onActiveChanged: {
+            console.log("Focus grab:", active)
+        }
+
         onCleared: {
+            console.log("Focus grab cleared")
+
             IslandManager.reset()
         }
     }
@@ -28,7 +35,7 @@ PanelWindow {
     }
 
     exclusiveZone: 33
-    implicitHeight: 85
+    implicitHeight: capsule.implicitHeight + 20
 
     color: "transparent"
 

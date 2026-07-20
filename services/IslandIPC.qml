@@ -16,4 +16,8 @@ IpcHandler {
     function reset() {
         IslandManager.reset()
     }
+
+    function openWallpaperSelector() {
+        IslandManager.setMode(IslandManager.wallpaperSelectorMode)
+    }
 }

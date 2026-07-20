@@ -62,8 +62,10 @@ Rectangle {
         case IslandManager.powerMenuMode:
         case IslandManager.controlCenterMode:
         case IslandManager.themeSwitcherMode:
-        case IslandManager.wallpaperSelectorMode:
             return 520
+
+        case IslandManager.wallpaperSelectorMode:
+            return 550
 
         default:
             if (StatusManager.visible)
@@ -80,8 +82,10 @@ Rectangle {
         case IslandManager.powerMenuMode:
         case IslandManager.controlCenterMode:
         case IslandManager.themeSwitcherMode:
-        case IslandManager.wallpaperSelectorMode:
             return 75
+
+        case IslandManager.wallpaperSelectorMode:
+            return 480
 
         default:
             if (StatusManager.visible)
@@ -316,6 +320,6 @@ Rectangle {
     Component {
         id: wallpaperSelectorView
 
-        Item { }
+        WallpaperSelectorView { }
     }
 }
