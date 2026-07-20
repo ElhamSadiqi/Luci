@@ -8,7 +8,37 @@ import "../managers"
 Rectangle {
     id: root
 
+    property int powerSelection: 0
+
     property bool locked: false
+
+    Connections {
+        target: IslandManager
+
+        function onModeChanged() {
+            if (IslandManager.mode === IslandManager.powerMenuMode)
+                keyboardFocus.forceActiveFocus()
+        }
+    }
+
+    FocusScope {
+        id: keyboardFocus
+
+        anchors.fill: parent
+
+        enabled: IslandManager.mode === IslandManager.powerMenuMode
+        focus: enabled
+
+        Keys.onPressed: function(event) {
+
+            switch (IslandManager.mode) {
+
+            case IslandManager.powerMenuMode:
+                handlePowerMenu(event)
+                break
+            }
+        }
+    }
 
     radius: 23
     color: "#000000"
@@ -193,6 +223,58 @@ Rectangle {
         }
     }
 
+    function handlePowerMenu(event) {
+
+        switch (event.key) {
+
+        case Qt.Key_Left:
+        case Qt.Key_H:
+            powerSelection = (powerSelection + 4) % 5
+            event.accepted = true
+            break
+
+        case Qt.Key_Right:
+        case Qt.Key_L:
+            powerSelection = (powerSelection + 1) % 5
+            event.accepted = true
+            break
+
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+
+            switch (powerSelection) {
+
+            case 0:
+                PowerService.lock()
+                break
+
+            case 1:
+                PowerService.suspend()
+                break
+
+            case 2:
+                PowerService.logout()
+                break
+
+            case 3:
+                PowerService.reboot()
+                break
+
+            case 4:
+                PowerService.poweroff()
+                break
+            }
+
+            event.accepted = true
+            break
+
+        case Qt.Key_Escape:
+            IslandManager.reset()
+            event.accepted = true
+            break
+        }
+    }
+
     Component {
         id: defaultView
 
@@ -214,7 +296,9 @@ Rectangle {
     Component {
         id: powerMenuView
 
-        PowerMenuView { }
+        PowerMenuView {
+            selectedIndex: root.powerSelection
+        }
     }
 
     Component {

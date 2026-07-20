@@ -4,6 +4,8 @@ import "../styles"
 Rectangle {
     id: root
 
+    property bool selected: false
+
     property string icon: ""
     property string title: ""
 
@@ -14,15 +16,27 @@ Rectangle {
 
     radius: 18
 
-    color: "#1A1A1A"
+    color: selected ? Theme.accent : "#1A1A1A"
 
+    scale: selected ? 1.04 : 1.0
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: 130
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    Behavior on color {
+        ColorAnimation {
+            duration: 130
+        }
+    }
 
     TapHandler {
         acceptedButtons: Qt.LeftButton
 
         onTapped: {
-            console.log("POWER CLICK:", root.title)
-
             if (root.action)
                 root.action()
         }
@@ -45,7 +59,7 @@ Rectangle {
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 20
 
-            color: Theme.textPrimary
+            color: selected ? "#000000" : Theme.textPrimary
         }
 
         Text {
@@ -55,7 +69,7 @@ Rectangle {
 
             font.pixelSize: 11
 
-            color: Theme.textPrimary
+            color: selected ? "#000000" : Theme.textPrimary
         }
     }
 }

@@ -1,10 +1,25 @@
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
+
 import "../components"
+import "../managers"
 
 PanelWindow {
-
     id: root
+
+    HyprlandFocusGrab {
+        id: focusGrab
+
+        active: IslandManager.mode === IslandManager.powerMenuMode
+        windows: [ root ]
+
+        onCleared: {
+            IslandManager.reset()
+        }
+    }
+
+    focusable: focusGrab.active
 
     anchors {
         top: true
@@ -17,7 +32,6 @@ PanelWindow {
 
     color: "transparent"
 
-
     MainCapsule {
         id: capsule
 
@@ -26,13 +40,10 @@ PanelWindow {
         anchors.topMargin: 10
     }
 
-
     Region {
         id: capsuleMask
-
         item: capsule
     }
-
 
     mask: capsuleMask
 }
