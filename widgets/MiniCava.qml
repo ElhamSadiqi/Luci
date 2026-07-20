@@ -1,4 +1,5 @@
 import QtQuick
+import "../styles"
 import "../services"
 
 Item {
@@ -24,7 +25,7 @@ Item {
 
                 radius: 2
 
-                color: "#E5E7EB"
+                color: Theme.textPrimary
 
                 anchors.bottom: parent.bottom
 

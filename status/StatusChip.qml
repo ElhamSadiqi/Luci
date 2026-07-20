@@ -9,7 +9,7 @@ Rectangle {
 
     radius: height / 2 
 
-    color: "#1A1A1A"
+    color: Theme.surface
 
     implicitHeight: 32
     implicitWidth: row.implicitWidth + 16

@@ -28,7 +28,7 @@ Item {
         Rectangle {
             id: pill
 
-            color: "#1A1A1A"
+            color: Theme.surface
             radius: 10
 
             implicitWidth: icons.implicitWidth + 18

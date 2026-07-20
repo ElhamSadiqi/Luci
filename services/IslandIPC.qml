@@ -20,4 +20,8 @@ IpcHandler {
     function openWallpaperSelector() {
         IslandManager.setMode(IslandManager.wallpaperSelectorMode)
     }
+
+    function openThemeSelector() {
+        IslandManager.setMode(IslandManager.themeSelectorMode)
+    }
 }

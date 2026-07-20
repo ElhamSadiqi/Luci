@@ -16,7 +16,7 @@ Rectangle {
 
     radius: 18
 
-    color: selected ? Theme.accent : "#1A1A1A"
+    color: selected ? Theme.accent : Theme.buttonBackground
 
     scale: selected ? 1.04 : 1.0
 
@@ -59,7 +59,7 @@ Rectangle {
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 20
 
-            color: selected ? "#000000" : Theme.textPrimary
+            color: selected ? Theme.background : Theme.textPrimary
         }
 
         Text {
@@ -69,7 +69,7 @@ Rectangle {
 
             font.pixelSize: 11
 
-            color: selected ? "#000000" : Theme.textPrimary
+            color: selected ? Theme.background : Theme.textPrimary
         }
     }
 }

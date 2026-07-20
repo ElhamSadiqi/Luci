@@ -142,7 +142,7 @@ FocusScope {
 
                     text: "Theme"
 
-                    color: "#000000"
+                    color: Theme.buttonText
 
                     font.pixelSize: 13
 
@@ -157,10 +157,9 @@ FocusScope {
 
                 radius: 12
 
-                color: "#202020"
+                border.color: Theme.border
 
                 border.width: 1
-                border.color: "#404040"
 
                 Text {
 

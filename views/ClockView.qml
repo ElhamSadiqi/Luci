@@ -1,4 +1,5 @@
 import QtQuick
+import "../styles"
 
 Item {
     id: root
@@ -13,7 +14,7 @@ Item {
 
         anchors.centerIn: parent
 
-        color: "#E5E7EB"
+        color: Theme.textPrimary
 
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 18

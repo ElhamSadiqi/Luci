@@ -1,4 +1,5 @@
 import QtQuick
+import "../styles"
 import "../services"
 
 Rectangle {
@@ -8,7 +9,7 @@ Rectangle {
     height: 36
     radius: 8
 
-    color: "#2A2A2A"
+    color: Theme.surface
     clip: true
 
     // Artwork currently displayed.
@@ -64,7 +65,7 @@ Rectangle {
 
         font.pixelSize: 16
 
-        color: "#E5E7EB"
+        color: Theme.textPrimary
     }
 
     Component.onCompleted: {

@@ -41,7 +41,7 @@ Rectangle {
     }
 
     radius: 23
-    color: "#000000"
+    color: Theme.background
 
     width: implicitWidth
     height: implicitHeight
@@ -61,9 +61,9 @@ Rectangle {
         case IslandManager.expandedMode:
         case IslandManager.powerMenuMode:
         case IslandManager.controlCenterMode:
-        case IslandManager.themeSwitcherMode:
             return 520
 
+        case IslandManager.themeSelectorMode:
         case IslandManager.wallpaperSelectorMode:
             return 550
 
@@ -81,8 +81,10 @@ Rectangle {
         case IslandManager.expandedMode:
         case IslandManager.powerMenuMode:
         case IslandManager.controlCenterMode:
-        case IslandManager.themeSwitcherMode:
             return 75
+
+        case IslandManager.themeSelectorMode:
+            return 410
 
         case IslandManager.wallpaperSelectorMode:
             return 480
@@ -215,8 +217,8 @@ Rectangle {
             case IslandManager.controlCenterMode:
                 return controlCenterView
 
-            case IslandManager.themeSwitcherMode:
-                return themeSwitcherView
+            case IslandManager.themeSelectorMode:
+                return themeSelectorView
 
             case IslandManager.wallpaperSelectorMode:
                 return wallpaperSelectorView
@@ -312,9 +314,9 @@ Rectangle {
     }
 
     Component {
-        id: themeSwitcherView
+        id: themeSelectorView
 
-        Item { }
+        ThemeSelectorView { }
     }
 
     Component {

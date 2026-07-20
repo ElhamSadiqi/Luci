@@ -46,8 +46,7 @@ Item {
             height: 6
             radius: height / 2
 
-            color: "#2A2A2A"
-
+            color: Theme.surface
 
             Rectangle {
                 anchors.left: parent.left
