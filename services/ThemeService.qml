@@ -10,10 +10,11 @@ Singleton {
 
     id: root
 
-
     property string currentTheme: "monochrome"
 
-
+    Process {
+        id: process
+    }
 
     property ListModel themes: ListModel {
 
@@ -229,121 +230,91 @@ Singleton {
             text: "#24292F"
         }
     }
-
+    
     function apply(themeName) {
 
-        var themeFile = ""
+        var component = Qt.createComponent(
+            "../styles/themes/" + themeName + "/Theme.qml"
+        )
 
-        switch(themeName) {
+        if (component.status !== Component.Ready) {
 
-        case "monochrome":
-            themeFile = "Monochrome.qml"
-            break
-
-        case "catppuccin":
-            themeFile = "Catppuccin.qml"
-            break
-
-        case "gruvbox":
-            themeFile = "Gruvbox.qml"
-            break
-
-        case "tokyonight":
-            themeFile = "TokyoNight.qml"
-            break
-
-        case "dracula":
-            themeFile = "Dracula.qml"
-            break
-
-        case "nord":
-            themeFile = "Nord.qml"
-            break
-
-        case "everforest":
-            themeFile = "Everforest.qml"
-            break
-
-        case "solarized":
-            themeFile = "Solarized.qml"
-            break
-
-        case "rosepine":
-            themeFile = "RosePine.qml"
-            break
-
-        case "gruvboxlight":
-            themeFile = "GruvboxLight.qml"
-            break
-
-        case "catppuccinlatte":
-            themeFile = "CatppuccinLatte.qml"
-            break
-
-        case "githublight":
-            themeFile = "GithubLight.qml"
-            break
-        }
-
-
-        if (themeFile !== "") {
-
-            var component = Qt.createComponent(
-                "../styles/themes/" + themeFile
+            console.log(
+                "Theme load error:",
+                component.errorString()
             )
 
-
-            if (component.status === Component.Ready) {
-
-                var theme = component.createObject()
-
-                applyTheme(theme)
-
-            } else {
-
-                console.log(
-                    "Theme load error:",
-                    component.errorString()
-                )
-            }
+            return
         }
 
+        var theme = component.createObject()
+
+        if (!theme) {
+
+            console.log("Failed to create theme object.")
+
+            return
+        }
+
+        applyTheme(theme)
+
+        theme.destroy()
 
         currentTheme = themeName
+
+        process.command = [
+            "bash",
+            Quickshell.env("HOME") + "/.config/quickshell/scripts/theme.sh",
+            themeName
+        ]
+
+        process.running = true
 
         console.log("Applying theme:", themeName)
     }
 
+
     function applyTheme(themeObject) {
 
-
         Theme.background = themeObject.background
-
         Theme.surface = themeObject.surface
-
         Theme.card = themeObject.card
-
+        Theme.overlay = themeObject.overlay
 
         Theme.textPrimary = themeObject.textPrimary
-
         Theme.textSecondary = themeObject.textSecondary
+        Theme.textMuted = themeObject.textMuted
 
+        Theme.icon = themeObject.icon
+        Theme.iconActive = themeObject.iconActive
 
         Theme.accent = themeObject.accent
-
+        Theme.accentHover = themeObject.accentHover
+        Theme.accentPressed = themeObject.accentPressed
 
         Theme.border = themeObject.border
+        Theme.borderSelected = themeObject.borderSelected
 
+        Theme.buttonBackground = themeObject.buttonBackground
+        Theme.buttonHover = themeObject.buttonHover
+        Theme.buttonSelected = themeObject.buttonSelected
+        Theme.buttonText = themeObject.buttonText
 
+        Theme.wallpaperOverlay = themeObject.wallpaperOverlay
+        Theme.wallpaperSelection = themeObject.wallpaperSelection
+
+        Theme.powerDanger = themeObject.powerDanger
+        Theme.powerWarning = themeObject.powerWarning
+
+        Theme.progress = themeObject.progress
+        Theme.progressBackground = themeObject.progressBackground
 
         console.log(
             "Theme loaded:",
             Theme.background,
             Theme.accent
         )
-
     }
-
 
 
     Component.onCompleted: {
@@ -351,5 +322,4 @@ Singleton {
         apply(currentTheme)
 
     }
-
 }
