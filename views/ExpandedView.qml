@@ -1,10 +1,20 @@
 import QtQuick
 
 import "../widgets"
+import "../services"
 
 Item {
     implicitWidth: 520
     implicitHeight: 75
+
+
+    BatteryService {
+        id: batteryService
+    }
+
+    WifiService {
+        id: wifiService
+    }
 
     Row {
         anchors.fill: parent
@@ -14,15 +24,18 @@ Item {
 
         spacing: 0
 
+
         LeftSection {
             width: 130
 
             anchors.verticalCenter: parent.verticalCenter
         }
 
+
         Item {
             width: 520 - 130 - 90 - 28
             height: parent.height
+
 
             CenterSection {
                 expanded: true
@@ -31,10 +44,15 @@ Item {
             }
         }
 
+
         RightSection {
+
             width: 90
 
             anchors.verticalCenter: parent.verticalCenter
+
+            batteryService: batteryService
+            wifiService: wifiService
         }
     }
 }

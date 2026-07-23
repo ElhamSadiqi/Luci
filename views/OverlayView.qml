@@ -8,9 +8,20 @@ Item {
 
     property bool expandedMode: false
 
-    implicitWidth: StatusManager.mode === "workspace"
-        ? 120
-        : 280
+    implicitWidth: {
+
+        switch (StatusManager.mode) {
+
+        case "workspace":
+            return 120
+
+        case "keyboard":
+            return 90
+
+        default:
+            return 280
+        }
+    }
 
     implicitHeight: 26
 
@@ -85,6 +96,18 @@ Item {
 
             color: Theme.textPrimary
             font.pixelSize: 13
+            font.weight: Font.Medium
+
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        Text {
+            visible: StatusManager.mode === "keyboard"
+
+            text: StatusManager.title
+
+            color: Theme.textPrimary
+            font.pixelSize: 16
             font.weight: Font.Medium
 
             Layout.alignment: Qt.AlignVCenter

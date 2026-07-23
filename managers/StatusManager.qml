@@ -11,7 +11,7 @@ Singleton {
     property string mode: ""
     property string icon: ""
     property string title: ""
-    property int value: 0
+    property var value
 
     property int statusWidth: 160
     property int statusHeight: 33

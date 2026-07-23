@@ -9,16 +9,11 @@ Singleton {
 
     property var player: null
 
+    property string title: ""
+    property string artist: ""
+    property string artUrl: ""
+
     readonly property bool playing: player !== null
-
-    readonly property string title:
-        player ? player.trackTitle : ""
-
-    readonly property string artist:
-        player ? player.trackArtist : ""
-
-    readonly property string artUrl:
-        player ? player.trackArtUrl : ""
 
     Timer {
         interval: 1000
@@ -26,12 +21,22 @@ Singleton {
         repeat: true
 
         onTriggered: {
-            if (Mpris.players.values.length > 0) {
-                root.player = Mpris.players.values[0]
-            } else {
-                root.player = null
-                console.log("No player")
+
+            if (Mpris.players.values.length === 0) {
+                player = null
+                return
             }
+
+            player = Mpris.players.values[0]
+
+            if (player.trackTitle !== "")
+                title = player.trackTitle
+
+            if (player.trackArtist !== "")
+                artist = player.trackArtist
+
+            if (player.trackArtUrl !== "")
+                artUrl = player.trackArtUrl
         }
     }
 }

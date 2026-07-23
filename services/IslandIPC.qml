@@ -24,4 +24,5 @@ IpcHandler {
     function openThemeSelector() {
         IslandManager.setMode(IslandManager.themeSelectorMode)
     }
+
 }

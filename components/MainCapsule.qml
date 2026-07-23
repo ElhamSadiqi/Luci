@@ -89,6 +89,7 @@ Rectangle {
         case IslandManager.wallpaperSelectorMode:
             return 480
 
+
         default:
             if (StatusManager.visible)
                 return StatusManager.statusHeight
@@ -97,18 +98,17 @@ Rectangle {
         }
     }
 
-
     Behavior on implicitWidth {
         NumberAnimation {
-            duration: 220
-            easing.type: Easing.OutCubic
+            duration: 500
+            easing.type: Easing.OutQuart
         }
     }
 
     Behavior on implicitHeight {
         NumberAnimation {
-            duration: 220
-            easing.type: Easing.OutCubic
+            duration: 500
+            easing.type: Easing.OutQuart
         }
     }
 
@@ -222,6 +222,9 @@ Rectangle {
 
             case IslandManager.wallpaperSelectorMode:
                 return wallpaperSelectorView
+
+            case IslandManager.appLauncherMode:
+                return appLauncherView
 
             default:
                 return defaultView

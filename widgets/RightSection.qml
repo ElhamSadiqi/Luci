@@ -1,10 +1,14 @@
 import QtQuick
 import "../styles"
 import "../status"
-import "../services"
 import "../managers"
 
 Item {
+
+    property Item batteryService
+    property Item wifiService
+
+
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
 
@@ -18,12 +22,14 @@ Item {
 
         spacing: 10
 
+
         StatusChip {
             visible: StatusManager.visible
 
             icon: StatusManager.icon
             title: StatusManager.title
         }
+
 
         Rectangle {
             id: pill
@@ -34,6 +40,7 @@ Item {
             implicitWidth: icons.implicitWidth + 18
             implicitHeight: icons.implicitHeight + 10
 
+
             Row {
                 id: icons
 
@@ -41,16 +48,26 @@ Item {
 
                 spacing: 14
 
+
                 Text {
-                    text: "󰤨"
+                    text: wifiService
+                        ? wifiService.icon
+                        : "󰤮"
+
                     color: Theme.icon
+
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 16
                 }
 
+
                 Text {
-                    text: "󰁹"
+                    text: batteryService
+                          ? batteryService.icon
+                          : "󰁺"
+
                     color: Theme.icon
+
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 16
                 }

@@ -6,6 +6,7 @@ ShellRoot {
 
     StatusWatcher {}
     WorkspaceService {}
+    KeyboardService {}
 
     IslandIPC {}
 
