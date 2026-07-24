@@ -1,5 +1,7 @@
 import QtQuick
 
+import "../styles"
+
 Item {
     id: root
 
@@ -17,7 +19,7 @@ Item {
 
         text: root.text
 
-        color: "white"
+        color: Theme.textPrimary
 
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: root.fontSize
@@ -64,7 +66,6 @@ Item {
             easing.type: Easing.Linear
         }
     }
-
 
     function shouldScroll() {
         return label.width > root.maxWidth + 20

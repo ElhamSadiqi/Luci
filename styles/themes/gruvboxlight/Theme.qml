@@ -2,45 +2,89 @@ import QtQuick
 
 QtObject {
 
-    // Backgrounds
+    // =========================================================
+    // BACKGROUNDS
+    // =========================================================
+
     property color background: "#FBF1C7"
     property color surface: "#F2E5BC"
     property color card: "#EBDBB2"
+
+    // =========================================================
+    // OVERLAYS
+    // =========================================================
+
     property color overlay: "#FFFFFF66"
 
-    // Text
+    property color overlayLight: "#00000008"
+    property color overlayMedium: "#00000018"
+    property color overlayStrong: "#00000030"
+
+    // =========================================================
+    // TEXT
+    // =========================================================
+
     property color textPrimary: "#3C3836"
     property color textSecondary: "#665C54"
     property color textMuted: "#928374"
 
-    // Icons
+    // =========================================================
+    // ICONS
+    // =========================================================
+
     property color icon: textSecondary
     property color iconActive: accent
 
-    // Accent
+    // =========================================================
+    // ACCENT
+    // =========================================================
+
     property color accent: "#B57614"
     property color accentHover: "#D79921"
     property color accentPressed: "#9D6A10"
 
-    // Borders
+    // =========================================================
+    // BORDERS
+    // =========================================================
+
     property color border: "#D5C4A1"
     property color borderSelected: accent
+    property color borderSubtle: "#00000012"
 
-    // Buttons
+    // =========================================================
+    // BUTTONS
+    // =========================================================
+
     property color buttonBackground: card
-    property color buttonHover: surface
+    property color buttonHover: "#E2CF9C"
     property color buttonSelected: accent
     property color buttonText: textPrimary
 
-    // Wallpaper
+    // =========================================================
+    // PREVIEW CARDS
+    // =========================================================
+
+    property color previewBackground: card
+    property color previewText: textPrimary
+
+    // =========================================================
+    // WALLPAPER
+    // =========================================================
+
     property color wallpaperOverlay: overlay
     property color wallpaperSelection: accent
 
-    // Power
+    // =========================================================
+    // POWER
+    // =========================================================
+
     property color powerDanger: "#CC241D"
     property color powerWarning: "#D79921"
 
-    // Progress
+    // =========================================================
+    // PROGRESS
+    // =========================================================
+
     property color progress: accent
     property color progressBackground: border
 }

@@ -60,10 +60,9 @@ Rectangle {
 
         radius: root.radius
 
-
         color: selected
-               ? "#00000066"
-               : "transparent"
+           ? Theme.wallpaperOverlay
+           : "transparent"
     }
 
     // selection border

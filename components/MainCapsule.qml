@@ -12,6 +12,10 @@ Rectangle {
 
     property bool locked: false
 
+    Component.onCompleted: {
+        ThemeService.initialize()
+    }
+
     Connections {
         target: IslandManager
 

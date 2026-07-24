@@ -37,7 +37,7 @@ FocusScope {
             Text {
 
                 anchors.left: parent.left
-                anchors.leftMargin: 30
+                anchors.leftMargin: 15
                 anchors.verticalCenter: parent.verticalCenter
 
                 text: "Themes"
@@ -50,7 +50,7 @@ FocusScope {
             Text {
 
                 anchors.right: parent.right
-                anchors.rightMargin: 20
+                anchors.rightMargin: 15
                 anchors.verticalCenter: parent.verticalCenter
 
                 text: ThemeService.themes.count + " Themes"
@@ -198,7 +198,7 @@ FocusScope {
 
             var row = Math.floor(selectedIndex / columns)
 
-            var cardHeight = 116   // 100px card + 16px spacing
+            var cardHeight = 114   // 100px card + 16px spacing
 
             var y = row * cardHeight
 

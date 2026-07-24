@@ -11,7 +11,7 @@ M.radius = 15
 
 M.blur = 7
 M.shadow = true
-M.shadow_color = "rgba(00000055)"
+M.shadow_color = "rgba(00000088)"
 
 M.active_opacity = 1.0
 M.inactive_opacity = 0.9

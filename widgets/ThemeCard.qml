@@ -6,14 +6,14 @@ Rectangle {
 
     property string themeName: ""
 
-    property color backgroundColor: "#202020"
+    property color backgroundColor: Theme.previewBackground
 
-    property color color1: "#FFFFFF"
-    property color color2: "#AAAAAA"
-    property color color3: "#555555"
+    property color color1: Theme.accent
+    property color color2: Theme.textSecondary
+    property color color3: Theme.border
 
-    property color accentColor: "#FFFFFF"
-    property color textColor: "#FFFFFF"
+    property color accentColor: Theme.accent
+    property color textColor: Theme.previewText
 
     property bool selected: false
 
@@ -106,7 +106,7 @@ Rectangle {
 
         visible: selected
 
-        color: "#00000022"
+        color: Theme.overlayMedium
 
         border.width: 2
 

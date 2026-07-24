@@ -68,11 +68,11 @@ case "$THEME" in
         ;;
 
     nord)
-        WP="chill.jpg"
+        WP="chainsaw-man.png"
         ;;
 
     rosepine)
-        WP="aesthetic-anime2.jpg"
+        WP="car.jpg"
         ;;
 
     solarized)
@@ -118,4 +118,6 @@ link_if_exists \
 
 echo
 echo "Applied theme: $THEME"
+
+echo "$THEME" > "$HOME/.config/quickshell/.current_theme"
 

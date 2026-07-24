@@ -316,10 +316,39 @@ Singleton {
         )
     }
 
+    Process {
+        id: themeReader
 
-    Component.onCompleted: {
+        command: [
+            "bash",
+            "-c",
+            "cat " + Quickshell.env("HOME") + "/.config/quickshell/.current_theme"
+        ]
 
-        apply(currentTheme)
+        stdout: StdioCollector {
 
+            onStreamFinished: {
+
+                let savedTheme = text.trim()
+
+                if (savedTheme !== "")
+                    root.currentTheme = savedTheme
+
+                console.log("Loaded theme:", root.currentTheme)
+
+                apply(root.currentTheme)
+            }
+        }
+    }
+
+    property bool initialized: false
+
+    function initialize() {
+
+        if (initialized)
+            return
+
+        initialized = true
+        themeReader.running = true
     }
 }

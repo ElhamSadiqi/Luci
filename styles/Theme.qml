@@ -11,7 +11,16 @@ QtObject {
     property color background: "#000000"
     property color surface: "#1A1A1A"
     property color card: "#202020"
+
+    // =========================================================
+    // OVERLAYS
+    // =========================================================
+
     property color overlay: "#00000066"
+
+    property color overlayLight: "#00000022"
+    property color overlayMedium: "#00000044"
+    property color overlayStrong: "#00000066"
 
     // =========================================================
     // TEXT
@@ -42,6 +51,7 @@ QtObject {
 
     property color border: "#404040"
     property color borderSelected: accent
+    property color borderSubtle: "#00000020"
 
     // =========================================================
     // BUTTONS
@@ -50,14 +60,20 @@ QtObject {
     property color buttonBackground: "#202020"
     property color buttonHover: "#2A2A2A"
     property color buttonSelected: accent
-
     property color buttonText: textPrimary
+
+    // =========================================================
+    // PREVIEW CARDS
+    // =========================================================
+
+    property color previewBackground: card
+    property color previewText: textPrimary
 
     // =========================================================
     // WALLPAPER SELECTOR
     // =========================================================
 
-    property color wallpaperOverlay: "#00000066"
+    property color wallpaperOverlay: overlayStrong
     property color wallpaperSelection: accent
 
     // =========================================================
@@ -73,6 +89,12 @@ QtObject {
 
     property color progress: accent
     property color progressBackground: "#404040"
+
+    // =========================================================
+    // FONTS
+    // =========================================================
+
+    property string iconFont: "JetBrainsMono Nerd Font"
 
     // =========================================================
     // LAYOUT (NOT THEME DEPENDENT)
@@ -94,6 +116,7 @@ QtObject {
     // ANIMATION
     // =========================================================
 
-    readonly property int fastAnimation: 180
-    readonly property int normalAnimation: 220
+    readonly property int animationFast: 180
+    readonly property int animationNormal: 220
+    readonly property int animationSlow: 500
 }

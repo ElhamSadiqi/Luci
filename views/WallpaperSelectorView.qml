@@ -57,7 +57,7 @@ FocusScope {
                 anchors.rightMargin: 20
                 anchors.verticalCenter: parent.verticalCenter
 
-                text: "Monochrome"
+                text: ThemeService.currentTheme
 
                 font.pixelSize: 13
                 color: Theme.textSecondary
@@ -134,7 +134,7 @@ FocusScope {
                 color: Theme.accent
 
                 border.width: 1
-                border.color: "#00000020"
+                border.color: Theme.borderSubtle
 
                 Text {
 
