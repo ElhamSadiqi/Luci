@@ -72,7 +72,7 @@ case "$THEME" in
         ;;
 
     rosepine)
-        WP="car.jpg"
+        WP="dark-fantasy.jpg"
         ;;
 
     solarized)

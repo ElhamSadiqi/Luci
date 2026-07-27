@@ -1,0 +1,114 @@
+[
+  {
+    "theme": "catppuccin",
+    "files": [
+      "catppuccin-cat.png",
+      "catppuccin-cat1.png",
+      "catppuccin.png",
+      "arch-black-4k.png",
+      "arch.png",
+      "catppuccin_triangle.png"
+    ]
+  },
+  {
+    "theme": "catppuccinlatte",
+    "files": [
+      "Minimal-Nord.png",
+      "field_black.jpg",
+      "nature.png"
+    ]
+  },
+  {
+    "theme": "dracula",
+    "files": [
+      "art4.jpg",
+      "chill.jpg",
+      "field_black.jpg"
+    ]
+  },
+  {
+    "theme": "everforest",
+    "files": [
+      "acidgreen2.png",
+      "forest4.jpg",
+      "foggy_valley_2.png"
+    ]
+  },
+  {
+    "theme": "githublight",
+    "files": [
+      "beach.jpg",
+      "field_black.jpg",
+      "nature.png"
+    ]
+  },
+  {
+    "theme": "gruvbox",
+    "files": [
+      "gruvbox15.png",
+      "gruvbox_astro.jpg",
+      "wallpaper_linux_generated_gruvbox.png",
+      "anime.png",
+      "bunny.png",
+      "burnout.png",
+      "earth.png",
+      "galaxy.png",
+      "gruv-dev-minimal.png",
+      "gruvbox_tux.png",
+      "headphones.png",
+      "pacman-ghosts.png"
+    ]
+  },
+  {
+    "theme": "gruvboxlight",
+    "files": [
+      "desktop pc wallpaper.jpg",
+      "study-room.jpg",
+      "train.png"
+    ]
+  },
+  {
+    "theme": "monochrome",
+    "files": [
+      "monochrome1.jpg",
+      "monochrome2.jpg",
+      "monochrome3.jpg",
+      "monochrome4.jpg",
+      "anime-girl3.jpg",
+      "art11.png"
+    ]
+  },
+  {
+    "theme": "nord",
+    "files": [
+      "Minimal-Nord.png",
+      "chainsaw-man.png",
+      "ign-0001.png",
+      "ign_batman.png"
+    ]
+  },
+  {
+    "theme": "rosepine",
+    "files": [
+      "sleeping.jpg",
+      "night-city.jpg",
+      "girl-car.png"
+    ]
+  },
+  {
+    "theme": "solarized",
+    "files": [
+      "earth.png",
+      "field_black.jpg",
+      "beach.jpg"
+    ]
+  },
+  {
+    "theme": "tokyonight",
+    "files": [
+      "tokyonight.png",
+      "tokyonight1.jpg",
+      "tokyonight.webp"
+    ]
+  }
+]

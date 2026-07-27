@@ -262,6 +262,8 @@ Singleton {
 
         currentTheme = themeName
 
+        WallpaperService.reload()
+        
         process.command = [
             "bash",
             Quickshell.env("HOME") + "/.config/quickshell/scripts/theme.sh",

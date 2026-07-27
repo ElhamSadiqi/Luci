@@ -4,22 +4,95 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
+import "."
+
 Singleton {
+
     id: root
 
-    property ListModel wallpapers: ListModel {}
+    // =========================================================
+    // Models
+    // =========================================================
 
-    // ==========================
-    // Scan wallpapers
-    // ==========================
+    property ListModel allWallpapers: ListModel {}
+    property ListModel themeWallpapers: ListModel {}
+
+    property ListModel currentModel: allWallpapers
+
+    property bool themeOnly: false
+
+    // loaded from wallpapers.json later
+    property var wallpaperMetadata: []
+
+    // =========================================================
+    // Theme filter
+    // =========================================================
+
+    function setFilter(theme) {
+
+        themeOnly = theme
+
+        currentModel = theme
+            ? themeWallpapers
+            : allWallpapers
+    }
 
     Process {
+
+        id: metadataProcess
+
+        command: [
+            "cat",
+            "/home/Arch/.config/quickshell/assets/wallpapers.json"
+        ]
+
+        stdout: StdioCollector {
+
+            onStreamFinished: {
+
+                try {
+
+                    root.wallpaperMetadata =
+                            JSON.parse(this.text)
+
+                    console.log(
+                        "Loaded wallpaper metadata:",
+                        root.wallpaperMetadata.length
+                    )
+
+                } catch(err) {
+
+                    console.log(
+                        "Failed to parse wallpapers.json:",
+                        err
+                    )
+
+                    root.wallpaperMetadata = []
+                }
+
+                root.reload()
+            }
+        }
+    }
+
+    // =========================================================
+    // Scan wallpapers
+    // =========================================================
+
+    Process {
+
         id: scanProcess
 
         command: [
             "bash",
             "-c",
-            "find $HOME/Pictures/Wallpapers -maxdepth 1 -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.gif' \\) | sort"
+            "find $HOME/Pictures/Wallpapers -maxdepth 1 -type f \\( \
+                -iname '*.jpg'  -o \
+                -iname '*.jpeg' -o \
+                -iname '*.png'  -o \
+                -iname '*.webp' -o \
+                -iname '*.gif' \
+            \\) | sort"
         ]
 
         stdout: SplitParser {
@@ -28,35 +101,87 @@ Singleton {
 
             onRead: function(line) {
 
-                if (line.trim().length === 0)
+                let path = line.trim()
+
+                if (path.length === 0)
                     return
 
-                root.wallpapers.append({
-                    path: line.trim()
+                // --------------------------
+                // Add to ALL model
+                // --------------------------
+
+                root.allWallpapers.append({
+                    path: path
                 })
+
+                // --------------------------
+                // Theme model
+                // --------------------------
+
+               let filename = path.split("/").pop()
+
+                let currentTheme = ThemeService.currentTheme.toLowerCase()
+
+                for (let i = 0; i < root.wallpaperMetadata.length; ++i) {
+
+                    let group = root.wallpaperMetadata[i]
+
+                    if (group.theme !== currentTheme)
+                        continue
+
+                    if (group.files.indexOf(filename) !== -1) {
+
+                        root.themeWallpapers.append({
+                            path: path
+                        })
+
+                        break
+                    }
+                }
             }
         }
 
         onStarted: {
-            root.wallpapers.clear()
+
+            root.allWallpapers.clear()
+            root.themeWallpapers.clear()
         }
 
         onExited: {
+
+            currentModel = themeOnly
+                ? themeWallpapers
+                : allWallpapers
+
             console.log("Wallpaper scan finished.")
+
+            console.log("Current theme:", ThemeService.currentTheme)
+
+            console.log(
+                "All:",
+                root.allWallpapers.count
+            )
+
+            console.log(
+                "Theme:",
+                root.themeWallpapers.count
+            )
         }
     }
 
-    // ==========================
+    // =========================================================
     // Apply wallpaper
-    // ==========================
+    // =========================================================
 
     Process {
+
         id: applyProcess
     }
 
     function apply(path) {
 
         applyProcess.command = [
+
             "awww",
             "img",
             path,
@@ -69,15 +194,20 @@ Singleton {
         applyProcess.running = true
     }
 
-    // ==========================
-    // Reload list
-    // ==========================
-
+    // =========================================================
+    // Reload
+    // =========================================================
     function reload() {
+
+        currentModel = themeOnly
+            ? themeWallpapers
+            : allWallpapers
+
         scanProcess.running = true
     }
 
     Component.onCompleted: {
-        reload()
+
+        metadataProcess.running = true
     }
 }

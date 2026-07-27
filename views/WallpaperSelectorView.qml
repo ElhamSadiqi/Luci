@@ -1,5 +1,6 @@
 import QtQuick
 import Qt.labs.folderlistmodel
+import QtQuick.Controls 2.15
 
 import "../widgets"
 import "../managers"
@@ -18,16 +19,14 @@ FocusScope {
 
     focus: true
 
-    property int selectedIndex: 0
+    // Sync with GridView's currentIndex
+    property int selectedIndex: wallpaperView.currentIndex
 
     property int columns: 3
 
     Column {
-
         anchors.fill: parent
-
         anchors.margins: 10
-
         spacing: 20
 
         // ====================================
@@ -40,7 +39,6 @@ FocusScope {
             height: 30
 
             Text {
-
                 anchors.left: parent.left
                 anchors.leftMargin: 30
                 anchors.verticalCenter: parent.verticalCenter
@@ -48,6 +46,7 @@ FocusScope {
                 text: "Wallpapers"
 
                 font.pixelSize: 20
+
                 color: Theme.textPrimary
             }
 
@@ -60,6 +59,7 @@ FocusScope {
                 text: ThemeService.currentTheme
 
                 font.pixelSize: 13
+
                 color: Theme.textSecondary
             }
         }
@@ -68,49 +68,77 @@ FocusScope {
         // Scrollable wallpaper area
         // ====================================
 
-        Flickable {
+        GridView {
 
-            id: wallpaperArea
-
-            Component.onCompleted: {
-                console.log("Flickable created")
-            }
-
-            focus: true
+            id: wallpaperView
 
             width: parent.width
             height: 340
 
+            contentItem.x: 15
+
             clip: true
 
-            interactive: false
+            interactive: true
             boundsBehavior: Flickable.StopAtBounds
 
-            contentWidth: wallpaperGrid.width
-            contentHeight: wallpaperGrid.height
+            keyNavigationEnabled: true
+            focus: true
 
-            Grid {
+            cellWidth: (width - 32) / columns
+            cellHeight: 116
 
-                id: wallpaperGrid
+            model: WallpaperService.currentModel
 
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                
-                columns: root.columns
+            delegate: Item {
 
-                spacing: 16
+                width: wallpaperView.cellWidth
+                height: wallpaperView.cellHeight
 
-                Repeater {
+                WallpaperCard {
 
-                    model: WallpaperService.wallpapers
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        leftMargin: 8
+                        rightMargin: 8
+                        top: parent.top
+                    }
 
-                    WallpaperCard {
+                    height: 100
 
-                        imageSource: model.path
+                    imageSource: model.path
 
-                        selected: index === root.selectedIndex
+                    selected: index === wallpaperView.currentIndex
+                }
+
+                MouseArea {
+
+                    anchors.fill: parent
+
+                    onClicked: {
+
+                        wallpaperView.currentIndex = index
+
+                        WallpaperService.apply(model.path)
                     }
                 }
+            }
+
+            ScrollBar.vertical: ScrollBar {
+
+                policy: ScrollBar.AsNeeded
+            }
+
+            onCurrentIndexChanged: {
+
+                Qt.callLater(function() {
+
+                    wallpaperView.positionViewAtIndex(
+                        currentIndex,
+                        GridView.Center
+                    )
+                })
             }
         }
 
@@ -124,6 +152,10 @@ FocusScope {
 
             spacing: 12
 
+            // -------------------------
+            // Theme Wallpapers
+            // -------------------------
+
             Rectangle {
 
                 width: 110
@@ -131,10 +163,26 @@ FocusScope {
 
                 radius: 12
 
-                color: Theme.accent
+                color: WallpaperService.themeOnly
+                    ? Theme.accent
+                    : Theme.buttonBackground
 
                 border.width: 1
-                border.color: Theme.borderSubtle
+                border.color: Theme.border
+
+                MouseArea {
+
+                    anchors.fill: parent
+
+                    onClicked: {
+
+                        WallpaperService.setFilter(true)
+
+                        wallpaperView.currentIndex = 0
+
+                        wallpaperView.forceActiveFocus()
+                    }
+                }
 
                 Text {
 
@@ -142,13 +190,18 @@ FocusScope {
 
                     text: "Theme"
 
-                    color: Theme.buttonText
+                    color: WallpaperService.themeOnly
+                        ? Theme.buttonText
+                        : Theme.textPrimary
 
                     font.pixelSize: 13
-
                     font.bold: true
                 }
             }
+
+            // -------------------------
+            // All Wallpapers
+            // -------------------------
 
             Rectangle {
 
@@ -157,9 +210,26 @@ FocusScope {
 
                 radius: 12
 
-                border.color: Theme.border
+                color: WallpaperService.themeOnly
+                    ? Theme.buttonBackground
+                    : Theme.accent
 
                 border.width: 1
+                border.color: Theme.border
+
+                MouseArea {
+
+                    anchors.fill: parent
+
+                    onClicked: {
+
+                        WallpaperService.setFilter(false)
+
+                        wallpaperView.currentIndex = 0
+
+                        wallpaperView.forceActiveFocus()
+                    }
+                }
 
                 Text {
 
@@ -167,123 +237,73 @@ FocusScope {
 
                     text: "All"
 
-                    color: Theme.textPrimary
+                    color: WallpaperService.themeOnly
+                        ? Theme.textPrimary
+                        : Theme.buttonText
 
                     font.pixelSize: 13
+                    font.bold: true
                 }
             }
         }
     }
 
+    // ====================================
+    // Keyboard handling
+    // ====================================
     Keys.onPressed: function(event) {
-        console.log("KEY:", event.key)
-
         switch (event.key) {
 
-        // ==========================
-        // LEFT
-        // ==========================
-
-        case Qt.Key_Left:
-        case Qt.Key_H:
-
-            if (selectedIndex % columns > 0)
-                selectedIndex--
-
-            event.accepted = true
-            break
-
-
-        // ==========================
-        // RIGHT
-        // ==========================
-
-        case Qt.Key_Right:
-        case Qt.Key_L:
-
-            if (selectedIndex % columns < columns - 1 &&
-                selectedIndex < WallpaperService.wallpapers.count - 1)
-
-                selectedIndex++
-
-            event.accepted = true
-            break
-
-
-        // ==========================
-        // UP
-        // ==========================
-
-        case Qt.Key_Up:
-        case Qt.Key_K:
-
-            if (selectedIndex - columns >= 0)
-                selectedIndex -= columns
-
-            event.accepted = true
-            break
-
-
-        // ==========================
-        // DOWN
-        // ==========================
-
-        case Qt.Key_Down:
-        case Qt.Key_J:
-
-            if (selectedIndex + columns < WallpaperService.wallpapers.count)
-                selectedIndex += columns
-
-            event.accepted = true
-            break
-
-
-        // ==========================
-        // ENTER
-        // ==========================
-
+        // ---- Enter: apply wallpaper ----
         case Qt.Key_Return:
         case Qt.Key_Enter:
+            if (wallpaperView.currentIndex >= 0 &&
+                wallpaperView.currentIndex < WallpaperService.currentModel.count) {
 
-            WallpaperService.apply(
-                WallpaperService.wallpapers.get(selectedIndex).path
-            )
+                var selectedItem =
+                        WallpaperService.currentModel.get(
+                            wallpaperView.currentIndex
+                        )
 
+                WallpaperService.apply(selectedItem.path)
+
+                event.accepted = true
+            }
+            break
+
+        // ---- Escape: go back ----
+        case Qt.Key_Escape:
+            IslandManager.reset()
             event.accepted = true
             break
 
-        // ==========================
-        // ESC
-        // ==========================
+        // ---- h/j/k/l Vim-style navigation ----
+        case Qt.Key_H:   // left
+            if (wallpaperView.currentIndex % columns > 0)
+                wallpaperView.currentIndex--
+            event.accepted = true
+            break
 
-        case Qt.Key_Escape:
+        case Qt.Key_J:   // down
+            if (wallpaperView.currentIndex + columns <
+                    WallpaperService.currentModel.count)
+                wallpaperView.currentIndex += columns
+            event.accepted = true
+            break
 
-            IslandManager.reset()
+        case Qt.Key_K:   // up
+            if (wallpaperView.currentIndex - columns >= 0)
+                wallpaperView.currentIndex -= columns
+            event.accepted = true
+            break
 
+        case Qt.Key_L:   // right
+            if (wallpaperView.currentIndex % columns < columns - 1 &&
+                wallpaperView.currentIndex <
+                    WallpaperService.currentModel.count - 1)
+                wallpaperView.currentIndex++
             event.accepted = true
             break
         }
-
-        // ======================================
-        // Keep selected wallpaper visible
-        // ======================================
-
-        Qt.callLater(function() {
-
-            var row = Math.floor(selectedIndex / columns)
-
-            var cardHeight = 116      // 100px card + 16px spacing
-
-            var y = row * cardHeight
-
-            if (y < wallpaperArea.contentY)
-                wallpaperArea.contentY = y
-
-            else if (y + cardHeight >
-                    wallpaperArea.contentY + wallpaperArea.height)
-
-                wallpaperArea.contentY =
-                        y + cardHeight - wallpaperArea.height
-        })
     }
 }
