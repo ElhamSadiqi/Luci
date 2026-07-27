@@ -8,3 +8,6 @@
 # Temporary files
 *.tmp
 .current_theme
+
+# Runtime symlink (created locally by the theme script)
+config/hypr/current-theme/theme.lua
