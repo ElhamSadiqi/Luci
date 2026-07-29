@@ -93,7 +93,7 @@ esac
 # -------------------------
 
 awww img \
-"$HOME/Pictures/Wallpapers/$WP" \
+"$HOME/Pictures/wallpapers/$WP" \
 --transition-type grow
 
 # -------------------------

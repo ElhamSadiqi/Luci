@@ -43,7 +43,7 @@ Singleton {
 
         command: [
             "cat",
-            "/home/Arch/.config/quickshell/assets/wallpapers.json"
+            Quickshell.env("HOME") + "/.config/quickshell/assets/wallpapers.json"
         ]
 
         stdout: StdioCollector {
@@ -86,7 +86,7 @@ Singleton {
         command: [
             "bash",
             "-c",
-            "find $HOME/Pictures/Wallpapers -maxdepth 1 -type f \\( \
+            "find $HOME/Pictures/wallpapers -maxdepth 1 -type f \\( \
                 -iname '*.jpg'  -o \
                 -iname '*.jpeg' -o \
                 -iname '*.png'  -o \
