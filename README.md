@@ -260,31 +260,36 @@ This approach keeps Luci and Hyprland using the same color palette while avoidin
 
 If you don't want Hyprland integration, simply ignore this file—Luci will continue to function normally.
 
-### Keybindings
+## Keybindings
 
-Luci does not register any keybindings on its own.
+Luci does not register any keybindings automatically.
 
-Views such as the Theme Selector, Wallpaper Selector, and Power Menu are intended to be opened through your Hyprland configuration.
-
-The repository includes an example configuration under:
-
-```text id="jv1r1m"
-config/hypr/
-```
-
-Use it as a reference for integrating Luci into your own setup.
+Views such as the Theme Selector, Wallpaper Selector, and Power Menu are opened through Hyprland by calling Luci's IPC interface.
 
 For example:
 
-| Action             | Example Keybinding |
-| ------------------ | ------------------ |
-| Theme Selector     | `SUPER + T`        |
-| Wallpaper Selector | `SUPER + W`        |
-| Power Menu         | `SUPER + P`        |
+### Hyprland (.conf)
 
-You are free to choose any keybindings that fit your workflow.
+```ini
+bind = SUPER, P, exec, qs ipc call luci openPowerMenu
+bind = SUPER, W, exec, qs ipc call luci openWallpaperSelector
+bind = SUPER, T, exec, qs ipc call luci openThemeSelector
+```
 
-Luci only provides the views—the method used to launch them is entirely up to your Hyprland configuration.
+### Hyprland (Lua)
+
+```lua
+hl.bind(mainMod .. " + P",
+    hl.dsp.exec_cmd("qs ipc call luci openPowerMenu"))
+
+hl.bind(mainMod .. " + W",
+    hl.dsp.exec_cmd("qs ipc call luci openWallpaperSelector"))
+
+hl.bind(mainMod .. " + T",
+    hl.dsp.exec_cmd("qs ipc call luci openThemeSelector"))
+```
+
+You are free to use any keybindings that fit your workflow. Luci only exposes the IPC commands—the way they are triggered is entirely up to your Hyprland configuration.
 
 ## Developer Guide
 
