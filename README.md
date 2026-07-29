@@ -22,6 +22,17 @@ The goal is simplicity rather than feature overload.
 - ⌨️ Full keyboard navigation
 - 🧩 Modular architecture
 
+## Requirements
+
+Luci is developed and tested with:
+
+- **Hyprland** 0.56.0
+- **Quickshell** 0.3.0
+- **Cava** (audio visualizer)
+- **Awww** (wallpaper backend)
+
+Luci is tested against the versions listed above. While newer versions may work, compatibility is only guaranteed for the versions used during development.
+
 
 ## Design Philosophy
 
