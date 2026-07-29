@@ -152,487 +152,100 @@ Luci looks for wallpapers in:
 ~/Pictures/wallpapers
 ```
 
-Simply copy your wallpapers into this directory and they will automatically appear under the **All** tab in the Wallpaper Selector.
+Simply copy your wallpapers into this directory and they'll automatically appear when browsing **All** wallpapers.
 
 ### Theme Wallpapers
 
-The **Theme** tab only displays wallpapers that belong to the currently active theme.
+The **Theme** button is designed to make choosing wallpapers easier.
 
-This information is defined in:
+Not every wallpaper matches every color palette, so Luci allows each theme to have its own wallpaper collection. Instead of browsing every wallpaper on your system, the **Theme** button only shows wallpapers assigned to the currently selected theme.
+
+Theme collections are defined in:
 
 ```text
 assets/wallpapers.json
 ```
 
-The repository ships with the wallpaper names used on my own system. Since you probably don't have those exact files, you'll want to replace them with your own wallpaper names.
+The repository includes the wallpaper names used on my own system. You'll likely want to replace them with your own filenames.
 
-### Default Theme Wallpapers
+For example:
 
-When you switch themes, Luci can also automatically change your wallpaper to a default image for that theme.
+```json
+{
+  "theme": "monochrome",
+  "files": [
+    "monochrome1.jpg",
+    "monochrome2.jpg",
+    "monochrome3.jpg"
+  ]
+}
+```
 
-These defaults are configured in:
+Simply replace the filenames with wallpapers that exist in your own `~/Pictures/wallpapers` directory.
+
+### Automatic Theme Wallpapers
+
+When switching themes, Luci can also automatically change your wallpaper.
+
+The default wallpaper for each theme is configured in:
 
 ```text
 scripts/theme.sh
 ```
 
-If you create your own themes or use different wallpaper names, update this file so each theme points to one of your own wallpapers.
-
-If you don't update these files:
-
-* The **All** tab will continue to work normally.
-* The **Theme** tab may appear empty or contain missing wallpapers.
-* Automatic wallpaper switching will reference files that don't exist on your system.
-
-
-
-
-
-
-
-### Creating a New Theme
-
-Luci's theming system is directory-based. Every theme lives inside its own folder and contains everything needed for both Luci and the applications it integrates with.
-
-A typical theme looks like this:
-
-```text id="5n9fr7"
-styles/themes/
-└── mytheme/
-    ├── Theme.qml
-    ├── HyprTheme.lua
-    └── kitty.conf
-```
-
-Each file has a specific purpose:
-
-* **Theme.qml** — Defines Luci's colors, accents, borders, buttons, and UI styling.
-* **HyprTheme.lua** — Defines the colors used by Hyprland.
-* **kitty.conf** — Applies the same color palette to Kitty, keeping the terminal consistent with the rest of the desktop.
-
-To create a new theme, simply duplicate an existing theme folder, rename it, and modify the files to match your desired color palette.
-
-### Customizing `Theme.qml`
-
-`Theme.qml` controls the appearance of Luci. Every built-in theme contains one, and every visual element in the interface reads its colors from this file.
-
-Some of the most commonly customized properties include:
-
-| Property             | Purpose                                                  |
-| -------------------- | -------------------------------------------------------- |
-| `background`         | Main window background color.                            |
-| `surface`            | Cards and panels.                                        |
-| `accent`             | Primary accent color used for selections and highlights. |
-| `textPrimary`        | Main text color.                                         |
-| `textSecondary`      | Secondary text color.                                    |
-| `border`             | Default border color.                                    |
-| `buttonBackground`   | Default button color.                                    |
-| `buttonHover`        | Button hover state.                                      |
-| `buttonSelected`     | Active/selected button color.                            |
-| `wallpaperSelection` | Border color around the selected wallpaper.              |
-
-Once the file is saved, simply reload Luci to see the changes.
-
-Every built-in widget uses these shared properties, allowing the entire interface to stay visually consistent without modifying individual components.
-
-### Hyprland Theme Integration
-
-Luci can synchronize its color palette with Hyprland.
-
-Each theme includes a `HyprTheme.lua` file that defines the colors used by your Hyprland configuration.
-
-When you switch themes inside Luci, the selected `HyprTheme.lua` is linked into your Hyprland configuration through:
-
-```text id="6rrqjj"
-config/hypr/current-theme/theme.lua
-```
-
-Your Hyprland configuration can then import this file and use its variables for borders, shadows, active/inactive window colors, and other appearance settings.
-
-This approach keeps Luci and Hyprland using the same color palette while avoiding duplicated configuration across multiple files.
-
-If you don't want Hyprland integration, simply ignore this file—Luci will continue to function normally.
-
-## Keybindings
-
-Luci does not register any keybindings automatically.
-
-Views such as the Theme Selector, Wallpaper Selector, and Power Menu are opened through Hyprland by calling Luci's IPC interface.
-
 For example:
 
-### Hyprland (.conf)
-
-```ini
-bind = SUPER, P, exec, qs ipc call luci openPowerMenu
-bind = SUPER, W, exec, qs ipc call luci openWallpaperSelector
-bind = SUPER, T, exec, qs ipc call luci openThemeSelector
+```bash
+monochrome)
+    WP="monochrome1.jpg"
+    ;;
 ```
 
-### Hyprland (Lua)
-
-```lua
-hl.bind(mainMod .. " + P",
-    hl.dsp.exec_cmd("qs ipc call luci openPowerMenu"))
-
-hl.bind(mainMod .. " + W",
-    hl.dsp.exec_cmd("qs ipc call luci openWallpaperSelector"))
-
-hl.bind(mainMod .. " + T",
-    hl.dsp.exec_cmd("qs ipc call luci openThemeSelector"))
-```
-
-You are free to use any keybindings that fit your workflow. Luci only exposes the IPC commands—the way they are triggered is entirely up to your Hyprland configuration.
-
-## Developer Guide
-
-Luci follows a modular architecture where every component has a single responsibility.
-
-Instead of placing all logic in one file, functionality is separated into services, managers, views, widgets, and styling modules. This makes the project easier to maintain and extend over time.
-
-The project is organized as follows:
-
-| Directory     | Purpose                                                                |
-| ------------- | ---------------------------------------------------------------------- |
-| `components/` | Shared reusable QML components.                                        |
-| `managers/`   | Controls navigation and high-level application state.                  |
-| `services/`   | Background services that provide system information and functionality. |
-| `views/`      | Individual pages shown inside the Dynamic Island.                      |
-| `widgets/`    | Small reusable UI elements used by multiple views.                     |
-| `styles/`     | Theme definitions and shared styling.                                  |
-| `scripts/`    | Helper scripts used by services.                                       |
-| `assets/`     | Static project resources such as wallpaper metadata.                   |
+Simply replace the filename with one of your own wallpapers.
 
-Each module is designed to be as independent as possible, making it straightforward to replace existing functionality or add new features without affecting unrelated parts of the project.
+If these files are left unchanged:
 
-### Project Structure
+* **All** wallpapers will continue to work normally.
+* The **Theme** button may not display any wallpapers for your themes.
+* Automatic wallpaper switching will reference wallpaper filenames that don't exist on your system.
 
-Luci is organized into small, focused modules. Each directory has a single responsibility, making the project easier to understand and extend.
+## Using Luci
 
-```text id="k4d9qp"
-Luci/
-├── assets/
-├── components/
-├── config/
-├── managers/
-├── scripts/
-├── services/
-├── styles/
-├── views/
-├── widgets/
-├── windows/
-└── shell.qml
-```
+Luci is designed around a simple interaction model. Most actions can be performed using either the mouse or the keyboard.
 
-| Directory     | Description                                                     |
-| ------------- | --------------------------------------------------------------- |
-| `assets/`     | Static resources such as wallpaper metadata.                    |
-| `components/` | Shared reusable QML components.                                 |
-| `config/`     | Example Hyprland configuration for integrating Luci.            |
-| `managers/`   | Handles application state and navigation.                       |
-| `scripts/`    | Shell scripts used by various services.                         |
-| `services/`   | Background services that communicate with the operating system. |
-| `styles/`     | Theme definitions and shared styling.                           |
-| `views/`      | Individual pages shown inside the Dynamic Island.               |
-| `widgets/`    | Small reusable UI components shared across views.               |
-| `windows/`    | Top-level application windows.                                  |
-| `shell.qml`   | Entry point of the project.                                     |
+### Default Bar
 
+When Luci starts, the Dynamic Island displays the compact clock.
 
-### Architecture
+- **Hover** the island to reveal the expanded bar.
+- **Click** the island to pin the expanded bar open.
+- **Click again** to return to the compact view.
 
-Luci follows a layered architecture where each layer has a single responsibility.
+### Navigation
 
-```
-User Input
-     │
-     ▼
-Managers
-     │
-     ▼
-Views
-     │
-     ▼
-Widgets
-     │
-     ▼
-Services
-     │
-     ▼
-System (Hyprland, Playerctl, NetworkManager, brightnessctl, etc.)
-```
+Most views support both Vim-style navigation and arrow keys.
 
-The general flow is:
+| Action | Keys |
+| ------- | ---- |
+| Move Left | `H` or `←` |
+| Move Right | `L` or `→` |
+| Move Up | `K` or `↑` |
+| Move Down | `J` or `↓` |
 
-* **Managers** decide *what* should be displayed.
-* **Views** describe complete interfaces such as the Default View, Theme Selector, or Wallpaper Selector.
-* **Widgets** are reusable building blocks shared between multiple views.
-* **Services** provide live system information and expose functions to the rest of the application.
-* **Scripts** are used only when a service needs to interact with external programs.
+### Closing Views
 
-This separation keeps the UI independent from the system logic. A widget never needs to know how battery information is collected, and a service never needs to know how that information is displayed.
+The Power Menu, Theme Selector, and Wallpaper Selector can be closed in either of the following ways:
 
-### Managers
+- Press `Esc`
+- Click anywhere outside the view
 
-Managers coordinate the behavior of Luci. Unlike services, they do not collect system information. Instead, they control which views are shown and how different parts of the interface interact.
+### Status Notifications
 
-#### IslandManager
+Luci provides temporary notifications whenever your system volume, brightness, or workspace changes.
 
-`IslandManager` is responsible for switching between the different views displayed inside the Dynamic Island.
+The behavior depends on the current state of the Dynamic Island:
 
-For example, it controls transitions between:
+- **Compact View:** the clock is temporarily replaced with the notification.
+- **Expanded Bar:** the notification appears as a **Status Chip** on the right side of the island, allowing the rest of the interface to remain visible.
 
-* Default View
-* Expanded View
-* Theme Selector
-* Wallpaper Selector
-* Power Menu
-
-Instead of each view opening itself, every transition goes through the `IslandManager`, keeping navigation centralized and predictable.
-
-#### StatusManager
-
-`StatusManager` controls the status chips shown around the island.
-
-It determines which chips are visible, updates their order, and manages temporary status indicators without requiring each individual service to modify the interface directly.
-
-Keeping this logic separate allows services to focus on providing data while managers focus on presenting it.
-
-### Services
-
-Services are the backbone of Luci.
-
-Each service is responsible for one specific task. Rather than placing all system logic in one file, Luci separates functionality into small, independent services that expose data and functions to the rest of the application.
-
-Views and widgets never communicate directly with the operating system—they communicate with services instead.
-
-Current services include:
-
-| Service            | Responsibility                                          |
-| ------------------ | ------------------------------------------------------- |
-| `BatteryService`   | Battery level, charging state, and related information. |
-| `CavaService`      | Audio visualizer data.                                  |
-| `IslandIPC`        | Communication between external commands and Luci.       |
-| `KeyboardService`  | Keyboard layout and input state.                        |
-| `MediaService`     | Media playback information using Playerctl.             |
-| `PowerService`     | Shutdown, reboot, suspend, and logout actions.          |
-| `StatusWatcher`    | Watches and updates status chips.                       |
-| `ThemeService`     | Loads and applies themes throughout Luci.               |
-| `WallpaperService` | Wallpaper management and theme-aware filtering.         |
-| `WifiService`      | Wireless connection status.                             |
-| `WorkspaceService` | Active workspace information from Hyprland.             |
-
-Each service is designed to be independent. A service should perform one task well and expose only the data needed by the interface.
-
-This makes it easy to add, remove, or replace functionality without affecting unrelated parts of the project.
-
-### Views
-
-Views represent complete interfaces inside Luci.
-
-Unlike widgets, which are small reusable components, a view is responsible for an entire screen or interaction.
-
-Current views include:
-
-| View                    | Purpose                                                                       |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `DefaultView`           | The default Dynamic Island layout shown during normal use.                    |
-| `ExpandedView`          | Displays additional system and media information when the island is expanded. |
-| `ClockView`             | Shows the current time.                                                       |
-| `DateView`              | Displays the current date.                                                    |
-| `OverlayView`           | Temporary overlay used for status feedback.                                   |
-| `PowerMenuView`         | Provides shutdown, reboot, suspend, and logout options.                       |
-| `ThemeSelectorView`     | Allows switching between installed themes.                                    |
-| `WallpaperSelectorView` | Lets the user browse and apply wallpapers, including theme-aware filtering.   |
-
-Views are intentionally lightweight. They focus on layout and user interaction while relying on services to provide data.
-
-A view should never be responsible for querying system information directly. Instead, it consumes data exposed by one or more services and presents it to the user.
-
-### Widgets
-
-Widgets are reusable user interface components used throughout Luci.
-
-Instead of duplicating UI code across multiple views, common elements are implemented once as widgets and reused wherever needed.
-
-Some of the built-in widgets include:
-
-| Widget             | Purpose                                                     |
-| ------------------ | ----------------------------------------------------------- |
-| `WallpaperCard`    | Displays a wallpaper preview inside the wallpaper selector. |
-| `ThemeCard`        | Displays a theme preview inside the theme selector.         |
-| `NowPlayingWidget` | Shows the currently playing media.                          |
-| `AlbumArt`         | Displays album artwork provided by the media service.       |
-| `SongInfo`         | Displays song title and artist information.                 |
-| `MiniCava`         | Compact audio visualizer.                                   |
-| `PowerOption`      | Individual power menu button.                               |
-| `ScrollingText`    | Displays long text with automatic scrolling.                |
-| `LeftSection`      | Left side of the Dynamic Island layout.                     |
-| `CenterSection`    | Center portion of the Dynamic Island.                       |
-| `RightSection`     | Right side of the Dynamic Island layout.                    |
-
-Widgets are designed to be completely reusable. A widget should focus only on presentation and interaction while receiving all required data from its parent view or from a service.
-
-This separation keeps the codebase modular and makes it easy to reuse the same component in multiple places without duplication.
-
-### Adding a New Service
-
-Adding new functionality to Luci usually starts by creating a service.
-
-A service should have a single responsibility. For example:
-
-* Weather
-* Bluetooth
-* VPN status
-* CPU usage
-* RAM usage
-
-Create a new file inside the `services/` directory:
-
-```text id="j0m6rf"
-services/
-└── WeatherService.qml
-```
-
-A service should:
-
-* Expose properties that other components can read.
-* Update its own data.
-* Provide functions when actions need to be performed.
-* Avoid containing user interface code.
-
-Once created, the service can be imported by any view or widget that needs it.
-
-The recommended flow is:
-
-```text id="4i4v8k"
-Operating System
-        │
-        ▼
-New Service
-        │
-        ▼
-View
-        │
-        ▼
-Widget
-```
-
-Keeping services independent makes them easy to maintain, test, and reuse throughout the project.
-
-### Adding a New View
-
-Views are responsible for displaying complete interfaces inside Luci.
-
-To create a new view, add a QML file inside the `views/` directory:
-
-```text id="q2y8nk"
-views/
-└── WeatherView.qml
-```
-
-A view should:
-
-* Arrange the layout of the interface.
-* Handle user interaction.
-* Read data from one or more services.
-* Compose reusable widgets when possible.
-* Avoid implementing system logic directly.
-
-After creating the view, register it with the appropriate manager (typically `IslandManager`) so it can be opened like the existing Theme Selector, Wallpaper Selector, or Power Menu.
-
-A typical workflow is:
-
-```text id="e6v3rm"
-Create Service
-      │
-      ▼
-Create View
-      │
-      ▼
-Register View
-      │
-      ▼
-Open from a Keybinding or Manager
-```
-
-Keeping navigation centralized through the managers makes it easy to add new functionality without modifying unrelated views.
-
-### Adding a New Widget
-
-Widgets are reusable building blocks used throughout Luci.
-
-If you find yourself copying the same UI into multiple views, it should probably become a widget.
-
-Create a new file inside the `widgets/` directory:
-
-```text id="8g3vxm"
-widgets/
-└── WeatherCard.qml
-```
-
-A widget should:
-
-* Focus on a single visual component.
-* Receive data through properties.
-* Avoid containing business or system logic.
-* Be reusable across multiple views.
-
-For example, a `WeatherCard` could be used in:
-
-* The Default View
-* The Expanded View
-* A dedicated Weather View
-
-without duplicating any interface code.
-
-A typical hierarchy inside Luci looks like this:
-
-```text id="2l7kqs"
-Service
-   │
-   ▼
-View
-   │
-   ├── Widget
-   ├── Widget
-   ├── Widget
-   └── Widget
-```
-
-Keeping widgets small and reusable helps maintain consistency across the interface while making future changes significantly easier.
-
-## Roadmap
-
-Luci intentionally has a small roadmap.
-
-The current plans are:
-
-* 🎛️ Control Center
-* 🚀 Application Launcher
-* ✨ General polish, bug fixes, and quality-of-life improvements
-
-The goal is to improve the existing experience rather than continuously adding new features.
-
-## Contributing
-
-Contributions are always welcome, whether it's bug fixes, documentation improvements, performance optimizations, or code cleanup.
-
-That said, Luci has a clear design philosophy:
-
-* Keep it simple.
-* Keep it lightweight.
-* Build features that solve real problems.
-
-The goal is **not** to add widgets simply because they look cool or because other desktop shells have them.
-
-Every new feature increases maintenance complexity, memory usage, and startup time. Before adding something new, ask yourself:
-
-* Does this improve everyday usability?
-* Does it fit Luci's minimalist philosophy?
-* Would most users actually use it?
-
-If the answer is no, it probably doesn't belong in Luci.
-
-The objective is to build a clean, responsive shell that stays fast and focused—not to become a feature-complete desktop environment.
-
+After a short delay, the notification automatically disappears and Luci returns to its normal state.
