@@ -2,7 +2,7 @@
 
 Luci is a minimalist Dynamic Island built with Quickshell for Hyprland.
 
-Unlike many desktop shell projects that try to replace every part of your desktop, Luci focuses on doing a few things well. It provides quick access to the features you use every day while staying lightweight, keyboard-friendly, and easy to extend.
+Unlike many desktop shell projects that aim to manage every aspect of the desktop, Luci focuses on a small set of everyday interactions. It provides quick access to the features you use most while remaining lightweight, keyboard-friendly, and easy to extend.
 
 The goal is simplicity rather than feature overload.
 
@@ -46,156 +46,149 @@ Luci was built around a few simple ideas:
 
 Luci is not intended to replace your desktop environment. It simply provides a clean, lightweight control center for everyday interactions.
 
-## Project Structure
-
-```text
-Luci/
-├── assets/
-│   └── wallpapers.json
-├── components/
-├── config/
-│   └── hypr/            # Example Hyprland configuration
-├── managers/
-├── scripts/
-├── services/
-├── styles/
-│   ├── Theme.qml
-│   └── themes/
-│       ├── catppuccin/
-│       ├── monochrome/
-│       └── ...
-├── views/
-├── widgets/
-├── windows/
-├── shell.qml
-└── ARCHITECTURE.md
-```
-
-| Directory | Purpose |
-|-----------|---------|
-| `assets/` | Static assets and wallpaper metadata. |
-| `components/` | Shared UI building blocks. |
-| `config/` | Example Hyprland configuration required for optional integrations. |
-| `managers/` | Global state and island navigation. |
-| `scripts/` | Helper shell scripts (theme switching, brightness, volume, wallpapers). |
-| `services/` | System integrations such as media, battery, Wi-Fi, wallpapers, themes, and IPC. |
-| `styles/` | Global styling and built-in themes. |
-| `views/` | Individual pages displayed inside the island. |
-| `widgets/` | Reusable UI widgets used across multiple views. |
-| `windows/` | Top-level Quickshell windows. |
-
 ## Installation
 
 ### 1. Clone the repository
+
+If you already use Quickshell, it's recommended to back up your existing configuration before replacing it.
+
+```bash
+mv ~/.config/quickshell ~/.config/quickshell.backup
+```
+
+Clone Luci into your Quickshell configuration directory:
 
 ```bash
 cd ~/.config
 git clone https://github.com/ElhamSadiqi/Luci.git quickshell
 ```
 
+---
+
 ### 2. Launch Luci
 
-Start Luci with:
+Start Luci manually:
 
 ```bash
 qs -c ~/.config/quickshell & disown
 ```
 
-At this point, Luci is fully functional as a standalone Quickshell shell. The Dynamic Island, media controls, status widgets, clock, and other core components will work without any Hyprland configuration.
+At this point, Luci is fully functional as a standalone Quickshell shell.
 
-### 3. Optional Hyprland Integration
+The Dynamic Island, media controls, clock, status indicators, and all core components will work immediately.
 
-Some features are designed to be launched through Hyprland keybindings rather than appearing automatically.
+> **Tip**
+>
+> If you're currently using Waybar at the top of your screen, you may want to stop it temporarily while testing Luci:
+>
+> ```bash
+> pkill waybar
+> ```
+>
+> This simply provides a cleaner preview of Luci. If your current bar is positioned elsewhere, you can safely ignore this step.
 
-These include:
+---
 
-* Theme Selector
-* Wallpaper Selector
-* Power Menu
+### 3. Configure Hyprland
 
-To use these views, add your own keybindings to your Hyprland configuration (`hyprland.conf` or `hyprland.lua`).
+Luci does not automatically register Hyprland keybindings.
 
-The repository includes an example configuration under:
+Views such as the **Power Menu**, **Wallpaper Selector**, and **Theme Selector** are opened through Hyprland using Luci's IPC interface.
+
+Add your preferred keybindings to your Hyprland configuration.
+
+For example:
+
+#### Hyprland (.conf)
+
+```ini
+bind = SUPER, P, exec, qs ipc call luci openPowerMenu
+bind = SUPER, W, exec, qs ipc call luci openWallpaperSelector
+bind = SUPER, T, exec, qs ipc call luci openThemeSelector
+```
+
+#### Hyprland (Lua)
+
+```lua
+hl.bind(mainMod .. " + P",
+    hl.dsp.exec_cmd("qs ipc call luci openPowerMenu"))
+
+hl.bind(mainMod .. " + W",
+    hl.dsp.exec_cmd("qs ipc call luci openWallpaperSelector"))
+
+hl.bind(mainMod .. " + T",
+    hl.dsp.exec_cmd("qs ipc call luci openThemeSelector"))
+```
+
+You are free to use any keybindings that fit your workflow.
+
+Luci only exposes the IPC commands—the way they are triggered is entirely up to your Hyprland configuration.
+
+## Theme Synchronization
+
+By default, the Theme Selector only changes Luci's appearance.
+
+If you also want it to update your Hyprland window borders, gaps, blur, rounding, and other decoration settings, your Hyprland configuration must be modular.
+
+An example configuration is included in:
 
 ```text
 config/hypr/
 ```
 
-which demonstrates how these keybindings are wired into Luci.
+The example demonstrates how appearance-related settings are separated into dedicated modules and loaded from the currently active theme.
 
-### 4. Theme Switching
+If your Hyprland configuration consists of a single `hyprland.conf` or `hyprland.lua` with hardcoded values, the Theme Selector cannot update Hyprland automatically.
 
-Luci's theme switcher also updates Hyprland colors.
+Luci itself will continue to change themes normally—the synchronization only affects Hyprland's appearance.
 
-To support this, your Hyprland configuration should be modular, similar to the example provided in `config/hypr/`. The supplied example separates appearance and theme-related configuration into dedicated modules, allowing the theme switcher to update only the files it needs without modifying the rest of your configuration.
+If you prefer to manage your Hyprland theme manually, you can safely ignore this integration.
 
-If you prefer not to use the provided Hyprland structure, Luci will still run normally—you'll simply lose automatic Hyprland theme synchronization.
+## Wallpaper Selector
 
-## Configuration
-
-Luci is designed to be easy to customize. Wallpapers, themes, and Hyprland integration are intentionally kept simple so you can adapt the project to your own workflow without modifying the core code.
-
-### Wallpaper Metadata
-
-Luci uses `assets/wallpapers.json` to organize wallpapers by theme.
-
-Each theme contains a list of wallpapers that should appear when the **Theme** filter is selected inside the wallpaper selector.
-
-Example:
-
-```json
-[
-  {
-    "theme": "rosepine",
-    "files": [
-      "night-city.jpg",
-      "girl-car.png",
-      "sleeping.jpg"
-    ]
-  }
-]
-```
-
-The wallpaper selector has two modes:
-
-* **Theme** — Displays only the wallpapers assigned to the currently active theme.
-* **All** — Displays every wallpaper found inside `~/Pictures/wallpapers`.
-
-This allows every theme to have its own curated wallpaper collection while still giving you access to your complete wallpaper library whenever you need it.
-
-### Adding Wallpapers
-
-Adding your own wallpapers is straightforward.
-
-1. Copy your wallpapers into:
+Luci looks for wallpapers in:
 
 ```text
 ~/Pictures/wallpapers
 ```
 
-2. Open `assets/wallpapers.json`.
+Simply copy your wallpapers into this directory and they will automatically appear under the **All** tab in the Wallpaper Selector.
 
-3. Add the wallpaper filename under the theme you want it to appear in.
+### Theme Wallpapers
 
-Example:
+The **Theme** tab only displays wallpapers that belong to the currently active theme.
 
-```json id="x6feg4"
-{
-  "theme": "rosepine",
-  "files": [
-    "night-city.jpg",
-    "girl-car.png",
-    "my-new-wallpaper.png"
-  ]
-}
+This information is defined in:
+
+```text
+assets/wallpapers.json
 ```
 
-4. Restart Luci (or reload the wallpaper service).
+The repository ships with the wallpaper names used on my own system. Since you probably don't have those exact files, you'll want to replace them with your own wallpaper names.
 
-The wallpaper will now appear under both:
+### Default Theme Wallpapers
 
-* **All** — because it exists in `~/Pictures/wallpapers`
-* **Theme** — if it is listed under the currently active theme in `wallpapers.json`
+When you switch themes, Luci can also automatically change your wallpaper to a default image for that theme.
+
+These defaults are configured in:
+
+```text
+scripts/theme.sh
+```
+
+If you create your own themes or use different wallpaper names, update this file so each theme points to one of your own wallpapers.
+
+If you don't update these files:
+
+* The **All** tab will continue to work normally.
+* The **Theme** tab may appear empty or contain missing wallpapers.
+* Automatic wallpaper switching will reference files that don't exist on your system.
+
+
+
+
+
+
 
 ### Creating a New Theme
 
