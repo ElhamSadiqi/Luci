@@ -88,18 +88,17 @@ The Dynamic Island, media controls, clock, status indicators, and all core compo
 > This simply provides a cleaner preview of Luci. If your current bar is positioned elsewhere, you can safely ignore this step.
 
 ---
-
 ### 3. Configure Hyprland
 
 Luci does not automatically register Hyprland keybindings.
 
-Views such as the **Power Menu**, **Wallpaper Selector**, and **Theme Selector** are opened through Hyprland using Luci's IPC interface.
+Views such as the Power Menu, Wallpaper Selector, and Theme Selector are opened through Hyprland using Luci's IPC interface.
 
 Add your preferred keybindings to your Hyprland configuration.
 
-For example:
+#### Opening Luci Views
 
-#### Hyprland (.conf)
+**Hyprland (.conf)**
 
 ```ini
 bind = SUPER, P, exec, qs ipc call luci openPowerMenu
@@ -107,7 +106,7 @@ bind = SUPER, W, exec, qs ipc call luci openWallpaperSelector
 bind = SUPER, T, exec, qs ipc call luci openThemeSelector
 ```
 
-#### Hyprland (Lua)
+**Hyprland (Lua)**
 
 ```lua
 hl.bind(mainMod .. " + P",
@@ -120,9 +119,77 @@ hl.bind(mainMod .. " + T",
     hl.dsp.exec_cmd("qs ipc call luci openThemeSelector"))
 ```
 
+---
+
+#### Volume & Brightness Notifications
+
+Luci also displays temporary status notifications whenever your volume or brightness changes.
+
+To enable this, route your multimedia keys through Luci's helper scripts.
+
+**Hyprland (.conf)**
+
+```ini
+# Volume
+bindel = , XF86AudioRaiseVolume, exec, ~/.config/quickshell/scripts/volume.sh up
+bindel = , XF86AudioLowerVolume, exec, ~/.config/quickshell/scripts/volume.sh down
+bindl  = , XF86AudioMute, exec, ~/.config/quickshell/scripts/volume.sh mute
+
+# Brightness
+bindel = , XF86MonBrightnessUp, exec, ~/.config/quickshell/scripts/brightness.sh +5%
+bindel = , XF86MonBrightnessDown, exec, ~/.config/quickshell/scripts/brightness.sh 5%-
+```
+
+**Hyprland (Lua)**
+
+```lua
+hl.bind("XF86AudioRaiseVolume",
+    hl.dsp.exec_cmd("~/.config/quickshell/scripts/volume.sh up"),
+    { locked = true, repeating = true })
+
+hl.bind("XF86AudioLowerVolume",
+    hl.dsp.exec_cmd("~/.config/quickshell/scripts/volume.sh down"),
+    { locked = true, repeating = true })
+
+hl.bind("XF86AudioMute",
+    hl.dsp.exec_cmd("~/.config/quickshell/scripts/volume.sh mute"),
+    { locked = true })
+
+hl.bind("XF86MonBrightnessUp",
+    hl.dsp.exec_cmd("~/.config/quickshell/scripts/brightness.sh +5%"),
+    { locked = true, repeating = true })
+
+hl.bind("XF86MonBrightnessDown",
+    hl.dsp.exec_cmd("~/.config/quickshell/scripts/brightness.sh 5%-"),
+    { locked = true, repeating = true })
+```
+
+Without these bindings, your volume and brightness keys may still function, but Luci won't receive the events required to display its status notifications.
+
 You are free to use any keybindings that fit your workflow.
 
-Luci only exposes the IPC commands—the way they are triggered is entirely up to your Hyprland configuration.
+Luci only exposes the IPC commands and helper scripts—the way they are triggered is entirely up to your Hyprland configuration.
+
+### 4. Wallpaper Backend
+
+Luci uses **Awww** to apply wallpapers.
+
+If you want the Wallpaper Selector to update your wallpaper, make sure the daemon is running.
+
+**Hyprland (.conf)**
+
+```ini
+exec-once = awww-daemon
+```
+
+**Hyprland (Lua)**
+
+```lua
+hl.exec_cmd("awww-daemon")
+```
+
+Without the daemon, the Wallpaper Selector will still display your wallpapers, but selecting one will have no effect.
+
 
 ## Theme Synchronization
 
@@ -211,9 +278,9 @@ If these files are left unchanged:
 
 ## Using Luci
 
-Luci is designed around a simple interaction model. Most actions can be performed using either the mouse or the keyboard.
+Luci is designed around a simple interaction model. Most actions can be performed using either the keyboard or the mouse.
 
-### Default Bar
+### Dynamic Island
 
 When Luci starts, the Dynamic Island displays the compact clock.
 
@@ -221,9 +288,9 @@ When Luci starts, the Dynamic Island displays the compact clock.
 - **Click** the island to pin the expanded bar open.
 - **Click again** to return to the compact view.
 
-### Navigation
+### Keyboard Navigation
 
-Most views support both Vim-style navigation and arrow keys.
+Most views support both Vim-style navigation and the arrow keys.
 
 | Action | Keys |
 | ------- | ---- |
@@ -231,13 +298,30 @@ Most views support both Vim-style navigation and arrow keys.
 | Move Right | `L` or `→` |
 | Move Up | `K` or `↑` |
 | Move Down | `J` or `↓` |
+| Confirm / Apply | `Enter` |
+
+Pressing **Enter** activates the currently selected item. For example:
+
+- Apply a theme in the **Theme Selector**
+- Apply a wallpaper in the **Wallpaper Selector**
+- Confirm an action in the **Power Menu**
+
+### Mouse Support
+
+Luci also supports mouse interaction where appropriate.
+
+- Hover over the Dynamic Island to expand it.
+- Click the Dynamic Island to pin or unpin the expanded bar.
+- Scroll or click to browse and apply wallpapers in the **Wallpaper Selector**.
+
+> **Note:** Mouse support for the Theme Selector will be added in a future update.
 
 ### Closing Views
 
 The Power Menu, Theme Selector, and Wallpaper Selector can be closed in either of the following ways:
 
 - Press `Esc`
-- Click anywhere outside the view
+- Click anywhere outside the view.
 
 ### Status Notifications
 
@@ -249,3 +333,29 @@ The behavior depends on the current state of the Dynamic Island:
 - **Expanded Bar:** the notification appears as a **Status Chip** on the right side of the island, allowing the rest of the interface to remain visible.
 
 After a short delay, the notification automatically disappears and Luci returns to its normal state.
+
+## Daily Driver
+
+If you've finished testing Luci and would like it to start automatically whenever you log in, you can configure Hyprland to launch it during startup.
+
+### Hyprland (.conf)
+
+```ini
+exec-once = qs -c ~/.config/quickshell
+```
+
+### Hyprland (Lua)
+
+```lua
+hl.on("hyprland.start", function()
+    hl.exec_cmd("qs -c ~/.config/quickshell")
+end)
+```
+
+Once configured, Luci will automatically start every time you begin a Hyprland session.
+
+If you're still experimenting or simply prefer running it manually, you can continue launching it whenever you'd like:
+
+```bash
+qs -c ~/.config/quickshell & disown
+```
