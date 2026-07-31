@@ -52,7 +52,7 @@ Rectangle {
         }
     }
 
-    // dark overlay when selected
+    // Selection overlay
 
     Rectangle {
 
@@ -65,7 +65,7 @@ Rectangle {
            : "transparent"
     }
 
-    // selection border
+    // Selection outline
 
     Rectangle {
 

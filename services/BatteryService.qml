@@ -41,15 +41,6 @@ Item {
                     root.status === "Charging"
 
                 updateIcon()
-
-                console.log(
-                    "Battery:",
-                    root.percentage,
-                    root.status,
-                    "AC:",
-                    root.pluggedIn,
-                    root.icon
-                )
             }
         }
     }

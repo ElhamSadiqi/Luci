@@ -15,9 +15,6 @@ case "$STEP" in
         ;;
 esac
 
-# ------------------------
-# READ CURRENT VOLUME
-# ------------------------
 VOLUME_INFO=$(wpctl get-volume "$SINK")
 
 VOLUME=$(awk '{printf "%d", $2 * 100}' <<< "$VOLUME_INFO")
@@ -28,9 +25,6 @@ else
     MUTED=0
 fi
 
-# ------------------------
-# WRITE EVENT
-# ------------------------
 CACHE_DIR="$HOME/.cache/quickshell/status"
 mkdir -p "$CACHE_DIR"
 

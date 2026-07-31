@@ -4,7 +4,6 @@ import QtQuick
 
 QtObject {
 
-    // Main UI Modes
     readonly property int defaultMode: 0
     readonly property int expandedMode: 1
     readonly property int powerMenuMode: 2

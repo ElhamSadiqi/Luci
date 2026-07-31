@@ -14,16 +14,6 @@ PanelWindow {
         active: IslandManager.modal
 
         windows: [ root ]
-
-        onActiveChanged: {
-            console.log("Focus grab:", active)
-        }
-
-        onCleared: {
-            console.log("Focus grab cleared")
-
-            IslandManager.reset()
-        }
     }
 
     focusable: focusGrab.active

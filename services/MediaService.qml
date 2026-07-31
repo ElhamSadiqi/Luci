@@ -13,30 +13,53 @@ Singleton {
     property string artist: ""
     property string artUrl: ""
 
-    readonly property bool playing: player !== null
+    readonly property bool hasPlayer: player !== null
+    
+    function updatePlayer() {
+        if (Mpris.players.values.length === 0) {
+            player = null
+
+            title = ""
+            artist = ""
+            artUrl = ""
+
+            return
+        }
+
+        if (player !== Mpris.players.values[0])
+            player = Mpris.players.values[0]
+
+        title = player.trackTitle
+        artist = player.trackArtist
+
+        // Keep the last valid artwork. Some MPRIS implementations briefly report
+        // an empty artwork URL even though the media hasn't actually changed.
+        if (player.trackArtUrl !== "")
+            artUrl = player.trackArtUrl
+    }
 
     Timer {
         interval: 1000
         running: true
         repeat: true
 
-        onTriggered: {
+        onTriggered: root.updatePlayer()
+    }
 
-            if (Mpris.players.values.length === 0) {
-                player = null
-                return
-            }
+    Connections {
+        target: player
 
-            player = Mpris.players.values[0]
+        function onTrackTitleChanged() {
+            root.title = player.trackTitle
+        }
 
-            if (player.trackTitle !== "")
-                title = player.trackTitle
+        function onTrackArtistChanged() {
+            root.artist = player.trackArtist
+        }
 
-            if (player.trackArtist !== "")
-                artist = player.trackArtist
-
+        function onTrackArtUrlChanged() {
             if (player.trackArtUrl !== "")
-                artUrl = player.trackArtUrl
+                root.artUrl = player.trackArtUrl
         }
     }
 }

@@ -48,7 +48,6 @@ Rectangle {
 
         spacing: 2
 
-        // visual only
         enabled: false
 
         Text {

@@ -57,16 +57,9 @@ Item {
                     root.layout = newLayout
                     root.fullName = newName
 
-                    console.log(
-                        "Keyboard:",
-                        root.layout,
-                        root.fullName
-                    )
-
                     return
                 }
 
-                // Nothing changed.
                 if (newLayout === root.lastLayout)
                     return
 
@@ -84,12 +77,6 @@ Item {
                     statusWidth: 220,
                     statusHeight: 33
                 })
-
-                console.log(
-                    "Keyboard:",
-                    root.layout,
-                    root.fullName
-                )
             }
         }
     }

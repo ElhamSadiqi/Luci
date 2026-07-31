@@ -239,7 +239,7 @@ Singleton {
 
         if (component.status !== Component.Ready) {
 
-            console.log(
+            console.error(
                 "Theme load error:",
                 component.errorString()
             )
@@ -251,7 +251,7 @@ Singleton {
 
         if (!theme) {
 
-            console.log("Failed to create theme object.")
+            console.error("Failed to create theme object.")
 
             return
         }
@@ -263,7 +263,7 @@ Singleton {
         currentTheme = themeName
 
         WallpaperService.reload()
-        
+
         process.command = [
             "bash",
             Quickshell.env("HOME") + "/.config/quickshell/scripts/theme.sh",
@@ -271,8 +271,6 @@ Singleton {
         ]
 
         process.running = true
-
-        console.log("Applying theme:", themeName)
     }
 
 
@@ -311,11 +309,6 @@ Singleton {
         Theme.progress = themeObject.progress
         Theme.progressBackground = themeObject.progressBackground
 
-        console.log(
-            "Theme loaded:",
-            Theme.background,
-            Theme.accent
-        )
     }
 
     Process {
@@ -335,8 +328,6 @@ Singleton {
 
                 if (savedTheme !== "")
                     root.currentTheme = savedTheme
-
-                console.log("Loaded theme:", root.currentTheme)
 
                 apply(root.currentTheme)
             }

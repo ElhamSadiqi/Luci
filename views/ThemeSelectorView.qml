@@ -25,10 +25,6 @@ FocusScope {
 
         spacing: 20
 
-        // ==========================================
-        // Header
-        // ==========================================
-
         Item {
 
             width: parent.width
@@ -61,10 +57,6 @@ FocusScope {
             }
         }
 
-        // ==========================================
-        // Scrollable Theme Area
-        // ==========================================
-
         Flickable {
 
             id: themeArea
@@ -79,11 +71,9 @@ FocusScope {
 
             boundsBehavior: Flickable.StopAtBounds
 
-
             contentWidth: themeGrid.width
 
             contentHeight: themeGrid.height
-
 
             Grid {
 
@@ -97,11 +87,9 @@ FocusScope {
 
                 spacing: 16
 
-
                 Repeater {
 
                     model: ThemeService.themes
-
 
                     ThemeCard {
 
@@ -189,7 +177,6 @@ FocusScope {
             break
         }
 
-
         // ======================================
         // Keep selected theme visible
         // ======================================
@@ -198,15 +185,13 @@ FocusScope {
 
             var row = Math.floor(selectedIndex / columns)
 
-            var cardHeight = 114   // 100px card + 16px spacing
+            var cardHeight = 114
 
             var y = row * cardHeight
-
 
             if (y < themeArea.contentY)
 
                 themeArea.contentY = y
-
 
             else if (
                 y + cardHeight >

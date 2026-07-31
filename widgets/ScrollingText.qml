@@ -30,7 +30,6 @@ Item {
         x: 0
     }
 
-
     SequentialAnimation {
         id: scrollAnimation
 
@@ -71,7 +70,6 @@ Item {
         return label.width > root.maxWidth + 20
     }
 
-
     onTextChanged: {
         scrollAnimation.stop()
 
@@ -82,6 +80,19 @@ Item {
         }
     }
 
+    // Restart scrolling only after the Text item has been laid out.
+    // The width is not updated immediately when the text changes.
+    Connections {
+        target: label
+
+        function onWidthChanged() {
+            scrollAnimation.stop()
+            label.x = 0
+
+            if (shouldScroll())
+                scrollAnimation.start()
+        }
+    }
 
     Component.onCompleted: {
         if (shouldScroll()) {

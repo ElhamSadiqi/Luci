@@ -7,7 +7,7 @@ Column {
 
     spacing: 2
 
-    readonly property bool hasMedia: MediaService.playing
+    readonly property bool hasMedia: MediaService.hasPlayer
 
     Row {
         spacing: 6
@@ -38,5 +38,21 @@ Column {
         fontSize: 11
 
         opacity: 0.7
+    }
+
+    Connections {
+        target: MediaService
+
+        function onTitleChanged() {
+            console.log("TITLE:", MediaService.title)
+        }
+
+        function onArtistChanged() {
+            console.log("ARTIST:", MediaService.artist)
+        }
+
+        function onHasPlayerChanged() {
+            console.log("HAS PLAYER:", MediaService.hasPlayer)
+        }
     }
 }

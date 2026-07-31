@@ -55,11 +55,6 @@ Singleton {
                     root.wallpaperMetadata =
                             JSON.parse(this.text)
 
-                    console.log(
-                        "Loaded wallpaper metadata:",
-                        root.wallpaperMetadata.length
-                    )
-
                 } catch(err) {
 
                     console.log(
@@ -145,27 +140,6 @@ Singleton {
 
             root.allWallpapers.clear()
             root.themeWallpapers.clear()
-        }
-
-        onExited: {
-
-            currentModel = themeOnly
-                ? themeWallpapers
-                : allWallpapers
-
-            console.log("Wallpaper scan finished.")
-
-            console.log("Current theme:", ThemeService.currentTheme)
-
-            console.log(
-                "All:",
-                root.allWallpapers.count
-            )
-
-            console.log(
-                "Theme:",
-                root.themeWallpapers.count
-            )
         }
     }
 

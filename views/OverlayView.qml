@@ -27,12 +27,10 @@ Item {
 
     property int maximum: 100
 
-
     RowLayout {
         anchors.fill: parent
 
         spacing: 10
-
 
         Text {
             text: StatusManager.icon
@@ -44,8 +42,6 @@ Item {
             Layout.alignment: Qt.AlignVCenter
         }
 
-
-        // Progress bar for volume and brightness only
         Rectangle {
             visible:
                 StatusManager.mode === "volume" ||
@@ -76,7 +72,6 @@ Item {
 
                 color: Theme.accent
 
-
                 Behavior on width {
                     NumberAnimation {
                         duration: 180
@@ -85,7 +80,6 @@ Item {
                 }
             }
         }
-
 
         Text {
             visible: StatusManager.mode === "workspace"
@@ -113,8 +107,6 @@ Item {
             Layout.alignment: Qt.AlignVCenter
         }
 
-
-        // Percentage text for volume and brightness
         Text {
             visible:
                 StatusManager.mode === "volume" ||

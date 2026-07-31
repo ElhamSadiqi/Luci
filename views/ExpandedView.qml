@@ -7,7 +7,6 @@ Item {
     implicitWidth: 520
     implicitHeight: 75
 
-
     BatteryService {
         id: batteryService
     }
@@ -31,11 +30,9 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-
         Item {
             width: 520 - 130 - 90 - 28
             height: parent.height
-
 
             CenterSection {
                 expanded: true
@@ -43,7 +40,6 @@ Item {
                 anchors.centerIn: parent
             }
         }
-
 
         RightSection {
 

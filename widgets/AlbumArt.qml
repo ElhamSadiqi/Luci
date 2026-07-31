@@ -12,18 +12,15 @@ Rectangle {
     color: Theme.surface
     clip: true
 
-    // Artwork currently displayed.
     property string currentArt: ""
 
-    // Whether we've successfully loaded artwork.
     property bool artworkReady: false
 
     Connections {
         target: MediaService
 
         function onArtUrlChanged() {
-            if (MediaService.artUrl !== "")
-                root.currentArt = MediaService.artUrl
+            root.currentArt = MediaService.artUrl
         }
     }
 
@@ -41,10 +38,7 @@ Rectangle {
         fillMode: Image.PreserveAspectCrop
 
         onStatusChanged: {
-            if (status === Image.Ready)
-                root.artworkReady = true
-            else if (status === Image.Error)
-                root.artworkReady = false
+            root.artworkReady = (status === Image.Ready)
         }
 
         opacity: root.artworkReady ? 1 : 0

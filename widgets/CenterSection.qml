@@ -32,8 +32,8 @@ Item {
 
 
             MiniCava {
-                visible: MediaService.playing && !root.expanded
-
+                visible: MediaService.hasPlayer && !root.expanded
+                
                 anchors.verticalCenter: parent.verticalCenter
             }
 

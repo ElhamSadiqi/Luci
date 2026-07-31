@@ -19,7 +19,6 @@ FocusScope {
 
     focus: true
 
-    // Sync with GridView's currentIndex
     property int selectedIndex: wallpaperView.currentIndex
 
     property int columns: 3
@@ -28,10 +27,6 @@ FocusScope {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 20
-
-        // ====================================
-        // Header
-        // ====================================
 
         Item {
 
@@ -63,10 +58,6 @@ FocusScope {
                 color: Theme.textSecondary
             }
         }
-
-        // ====================================
-        // Scrollable wallpaper area
-        // ====================================
 
         GridView {
 
@@ -142,19 +133,11 @@ FocusScope {
             }
         }
 
-        // ====================================
-        // Bottom buttons
-        // ====================================
-
         Row {
 
             anchors.horizontalCenter: parent.horizontalCenter
 
             spacing: 12
-
-            // -------------------------
-            // Theme Wallpapers
-            // -------------------------
 
             Rectangle {
 
@@ -198,10 +181,6 @@ FocusScope {
                     font.bold: true
                 }
             }
-
-            // -------------------------
-            // All Wallpapers
-            // -------------------------
 
             Rectangle {
 
@@ -248,13 +227,9 @@ FocusScope {
         }
     }
 
-    // ====================================
-    // Keyboard handling
-    // ====================================
     Keys.onPressed: function(event) {
         switch (event.key) {
 
-        // ---- Enter: apply wallpaper ----
         case Qt.Key_Return:
         case Qt.Key_Enter:
             if (wallpaperView.currentIndex >= 0 &&
@@ -271,33 +246,31 @@ FocusScope {
             }
             break
 
-        // ---- Escape: go back ----
         case Qt.Key_Escape:
             IslandManager.reset()
             event.accepted = true
             break
 
-        // ---- h/j/k/l Vim-style navigation ----
-        case Qt.Key_H:   // left
+        case Qt.Key_H:
             if (wallpaperView.currentIndex % columns > 0)
                 wallpaperView.currentIndex--
             event.accepted = true
             break
 
-        case Qt.Key_J:   // down
+        case Qt.Key_J:  
             if (wallpaperView.currentIndex + columns <
                     WallpaperService.currentModel.count)
                 wallpaperView.currentIndex += columns
             event.accepted = true
             break
 
-        case Qt.Key_K:   // up
+        case Qt.Key_K:  
             if (wallpaperView.currentIndex - columns >= 0)
                 wallpaperView.currentIndex -= columns
             event.accepted = true
             break
 
-        case Qt.Key_L:   // right
+        case Qt.Key_L:   
             if (wallpaperView.currentIndex % columns < columns - 1 &&
                 wallpaperView.currentIndex <
                     WallpaperService.currentModel.count - 1)

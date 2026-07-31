@@ -41,14 +41,6 @@ Item {
                 root.ssid = parts.slice(2).join(":")
 
                 updateIcon()
-
-                console.log(
-                    "WiFi:",
-                    root.connected,
-                    root.strength,
-                    root.ssid,
-                    root.icon
-                )
             }
         }
     }

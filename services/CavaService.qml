@@ -42,22 +42,15 @@ Singleton {
             }
         }
 
-        onStarted: {
-            console.log("Cava started")
-        }
+       
 
         onExited: function(exitCode, exitStatus) {
-
-            console.log(
-                "Cava exited:",
-                exitCode,
-                exitStatus
-            )
 
             root.bars = []
 
             if (root.shouldRun)
                 restartTimer.restart()
+                
         }
     }
 
@@ -69,7 +62,6 @@ Singleton {
         running: true
 
         onTriggered: {
-            console.log("Starting cava...")
             cava.running = true
         }
     }
@@ -84,8 +76,6 @@ Singleton {
 
             if (!root.shouldRun)
                 return
-
-            console.log("Restarting cava...")
 
             cava.running = false
             cava.running = true
