@@ -31,7 +31,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
 
 
-            MiniCava {
+            Cava {
                 visible: MediaService.hasPlayer && !root.expanded
                 
                 anchors.verticalCenter: parent.verticalCenter

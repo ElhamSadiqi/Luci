@@ -1,40 +1,55 @@
 import QtQuick
+
 import "../styles"
 import "../services"
 
 Item {
     id: root
 
-    width: 26
-    height: 8
+    property int barCount: 5
+    property int barWidth: 3
+    property int spacingSize: 2
+
+    property int baseHeight: 3
+    property int extraHeight: 10
+
+    implicitWidth:
+        (barCount * barWidth) +
+        ((barCount - 1) * spacingSize)
+
+    implicitHeight:
+        baseHeight + extraHeight
 
     Row {
         id: barsRow
 
         anchors.fill: parent
 
-        spacing: 2
+        spacing: root.spacingSize
 
         Repeater {
-            model: 5
+
+            model: root.barCount
 
             Rectangle {
                 required property int index
 
-                width: 3
+                width: root.barWidth
 
-                radius: 2
-
-                color: Theme.textPrimary
+                radius: width / 2
 
                 anchors.bottom: parent.bottom
+
+                color: Theme.textPrimary
 
                 property real level:
                     index < CavaService.bars.length
                         ? CavaService.bars[index] / 100
                         : 0
 
-                height: 3 + (level * 10)
+                height:
+                    root.baseHeight +
+                    (level * root.extraHeight)
 
                 Behavior on height {
                     NumberAnimation {

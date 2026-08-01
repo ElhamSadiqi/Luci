@@ -10,8 +10,6 @@ Rectangle {
 
     property int powerSelection: 0
 
-    property bool locked: false
-
     Component.onCompleted: {
         ThemeService.initialize()
     }
@@ -65,6 +63,7 @@ Rectangle {
         case IslandManager.expandedMode:
         case IslandManager.powerMenuMode:
         case IslandManager.controlCenterMode:
+        case IslandManager.mediaControlsMode:
             return 520
 
         case IslandManager.themeSelectorMode:
@@ -93,6 +92,8 @@ Rectangle {
         case IslandManager.wallpaperSelectorMode:
             return 480
 
+        case IslandManager.mediaControlsMode:
+            return 130
 
         default:
             if (StatusManager.visible)
@@ -125,12 +126,21 @@ Rectangle {
                 return
 
             if (hover.hovered) {
+
                 collapseTimer.stop()
+
+                if (
+                    IslandManager.mode === IslandManager.mediaControlsMode &&
+                    IslandManager.islandPinned
+                )
+                    return
+
                 expandTimer.restart()
+
             } else {
                 expandTimer.stop()
 
-                if (!root.locked)
+                if (!IslandManager.islandPinned)
                     collapseTimer.restart()
             }
         }
@@ -144,15 +154,21 @@ Rectangle {
             if (IslandManager.modal)
                 return
 
-            root.locked = !root.locked
+            IslandManager.islandPinned =
+                !IslandManager.islandPinned
 
-            if (root.locked) {
+            if (IslandManager.islandPinned) {
+
                 expandTimer.stop()
                 collapseTimer.stop()
 
-                IslandManager.setMode(
-                    IslandManager.expandedMode
-                )
+                if (IslandManager.mode !== IslandManager.mediaControlsMode) {
+
+                    IslandManager.setMode(
+                        IslandManager.expandedMode
+                    )
+                }
+
             } else {
 
                 if (!hover.hovered)
@@ -168,6 +184,12 @@ Rectangle {
         repeat: false
 
         onTriggered: {
+
+            if (
+                IslandManager.mode === IslandManager.mediaControlsMode &&
+                IslandManager.islandPinned
+            )
+                return
 
             if (IslandManager.modal)
                 return
@@ -186,11 +208,31 @@ Rectangle {
 
         onTriggered: {
 
-            if (IslandManager.modal)
-                return
+          if (
+                IslandManager.mode ===
+                IslandManager.mediaControlsMode
+            ) {
 
-            if (!root.locked)
-                IslandManager.reset()
+                if (
+                    IslandManager.returnToPinnedExpanded
+                ) {
+
+                    IslandManager.islandPinned = true
+                    IslandManager.returnToPinnedExpanded = false
+
+                    IslandManager.setMode(
+                        IslandManager.expandedMode
+                    )
+
+                } else {
+
+                    IslandManager.reset()
+                }
+
+                return
+            }
+
+            IslandManager.reset()
         }
     }
 
@@ -229,6 +271,9 @@ Rectangle {
 
             case IslandManager.appLauncherMode:
                 return appLauncherView
+            
+            case IslandManager.mediaControlsMode:
+                return mediaView
 
             default:
                 return defaultView
@@ -330,5 +375,11 @@ Rectangle {
         id: wallpaperSelectorView
 
         WallpaperSelectorView { }
+    }
+
+    Component {
+        id: mediaView
+
+        MediaView { }
     }
 }

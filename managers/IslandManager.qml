@@ -10,14 +10,21 @@ QtObject {
     readonly property int controlCenterMode: 3
     readonly property int themeSelectorMode: 4
     readonly property int wallpaperSelectorMode: 5
+    readonly property int mediaControlsMode: 6
 
     property int mode: defaultMode
+
+    property bool islandPinned: false
+    property bool returnToPinnedExpanded: false
+
+    property bool mediaPinned: false
 
     function setMode(newMode) {
         mode = newMode
     }
 
     function reset() {
+        mediaPinned = false
         mode = defaultMode
     }
 

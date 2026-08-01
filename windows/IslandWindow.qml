@@ -14,6 +14,10 @@ PanelWindow {
         active: IslandManager.modal
 
         windows: [ root ]
+
+        onCleared: {
+            IslandManager.reset()
+        }
     }
 
     focusable: focusGrab.active

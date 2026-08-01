@@ -14,7 +14,7 @@ Item {
 
         anchors.centerIn: parent
 
-        MiniCava {
+        Cava {
             visible: MediaService.hasPlayer
             anchors.verticalCenter: parent.verticalCenter
         }

@@ -1,9 +1,20 @@
 import QtQuick
+import QtQml
+
 import "../styles"
 import "../services"
 
+
 Column {
     id: root
+
+    property bool showCava: true
+
+    property int titleWidth: 80
+    property int artistWidth: 130
+
+    property int titleFontSize: 13
+    property int artistFontSize: 11
 
     spacing: 2
 
@@ -12,35 +23,41 @@ Column {
     Row {
         spacing: 6
 
-        MiniCava {
+        Cava {
+
+            visible: hasMedia && root.showCava
+
             anchors.verticalCenter: parent.verticalCenter
-            visible: hasMedia
         }
 
         ScrollingText {
+
             text: hasMedia
                     ? (MediaService.title || "No Title")
                     : "Nothing"
 
-            maxWidth: 80
+            maxWidth: root.titleWidth
 
+            fontSize: root.titleFontSize
             anchors.verticalCenter: parent.verticalCenter
         }
     }
 
     ScrollingText {
+
         text: hasMedia
                 ? (MediaService.artist || "Unknown Artist")
                 : "Playing"
 
-        maxWidth: 130
+        maxWidth: root.artistWidth
 
-        fontSize: 11
+        fontSize: root.artistFontSize
 
         opacity: 0.7
     }
 
     Connections {
+
         target: MediaService
 
         function onTitleChanged() {

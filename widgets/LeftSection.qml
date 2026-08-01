@@ -1,7 +1,13 @@
 import QtQuick
+
 import "../styles"
+import "../managers"
 
 Item {
+    id: root
+
+    property bool interactive: true
+
     implicitWidth: Theme.leftSectionWidth
     implicitHeight: nowPlaying.implicitHeight
 
@@ -11,5 +17,31 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: Theme.sectionGap
         anchors.verticalCenter: parent.verticalCenter
+    }
+
+    HoverHandler {
+        enabled: root.interactive
+        cursorShape: Qt.PointingHandCursor
+    }
+
+    TapHandler {
+        enabled: root.interactive
+
+        acceptedButtons: Qt.LeftButton
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+
+        onTapped: function(event) {
+
+            event.accepted = true
+
+            IslandManager.returnToPinnedExpanded =
+                IslandManager.islandPinned
+
+            IslandManager.islandPinned = false
+
+            IslandManager.setMode(
+                IslandManager.mediaControlsMode
+            )
+        }
     }
 }
