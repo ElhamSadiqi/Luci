@@ -27,7 +27,7 @@ Singleton {
         run([
             "hyprctl",
             "dispatch",
-            "exit"
+            "hl.dsp.exit()"
         ])
     }
 
