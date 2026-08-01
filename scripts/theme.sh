@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 THEME="$1"
 
 if [[ -z "$THEME" ]]; then
