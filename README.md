@@ -6,45 +6,32 @@ Unlike many desktop shell projects that aim to manage every aspect of the deskto
 
 The goal is simplicity rather than feature overload.
 
-
-
 ## Features
 
 - 🎨 Dynamic theme switching
 - 🖼️ Theme-aware wallpaper selector
-- 🎵 Media controls with album artwork
-- 🔊 Volume control
-- ☀️ Brightness control
+- 🎵 Rich media controls with waveform progress
+- 🔊 Volume notifications
+- ☀️ Brightness notifications
 - 🔋 Battery status
 - 📶 Wi-Fi status
-- 📊 Cava audio visualizer
+- 📊 Real-time CAVA visualizer
 - ⚡ Power menu
-- ⌨️ Full keyboard navigation
+- ⌨️ Vim-inspired keyboard navigation
 - 🧩 Modular architecture
+
 
 ## Requirements
 
 Luci is developed and tested with:
 
-- **Hyprland** 0.56.0
+- **Hyprland** 0.56.1
 - **Quickshell** 0.3.0
 - **Cava** (audio visualizer)
 - **Awww** (wallpaper backend)
 
-Luci is tested against the versions listed above. While newer versions may work, compatibility is only guaranteed for the versions used during development.
+These are the versions currently used during development and testing.
 
-
-## Design Philosophy
-
-Luci was built around a few simple ideas:
-
-- Keep the interface small and distraction-free.
-- Prefer keyboard navigation over complex menus.
-- Make every feature modular.
-- Avoid unnecessary dependencies.
-- Keep the codebase easy to read and extend.
-
-Luci is not intended to replace your desktop environment. It simply provides a clean, lightweight control center for everyday interactions.
 
 ## Installation
 
@@ -101,9 +88,9 @@ Add your preferred keybindings to your Hyprland configuration.
 **Hyprland (.conf)**
 
 ```ini
-bind = SUPER, P, exec, qs ipc call luci openPowerMenu
-bind = SUPER, W, exec, qs ipc call luci openWallpaperSelector
-bind = SUPER, T, exec, qs ipc call luci openThemeSelector
+bind = mainMod, P, exec, qs ipc call luci openPowerMenu
+bind = mainMod, W, exec, qs ipc call luci openWallpaperSelector
+bind = mainMod, T, exec, qs ipc call luci openThemeSelector
 ```
 
 **Hyprland (Lua)**
@@ -280,45 +267,68 @@ If these files are left unchanged:
 
 Luci is designed around a simple interaction model. Most actions can be performed using either the keyboard or the mouse.
 
-### Dynamic Island
+## Dynamic Island
 
 When Luci starts, the Dynamic Island displays the compact clock.
 
-- **Hover** the island to reveal the expanded bar.
-- **Click** the island to pin the expanded bar open.
-- **Click again** to return to the compact view.
+### Expanding the Island
 
-### Keyboard Navigation
+- Hover over the island to reveal the expanded view.
+- Clicking an **empty area** of the expanded view toggles whether it is pinned.
 
-Most views support both Vim-style navigation and the arrow keys.
+When the expanded view is:
+
+- **Pinned:** it stays open even after moving the mouse away.
+- **Unpinned:** it automatically returns to the compact clock when the cursor leaves the island.
+
+> Clicking buttons or interactive sections (such as Media Controls) does **not** toggle the pinned state.
+
+---
+
+## Media Controls
+
+When an MPRIS-compatible media player (such as Firefox, Spotify, MPV, VLC, etc.) is playing media, Luci makes Media Controls available from the expanded view.
+
+To open the Media Controls:
+
+1. Hover over the Dynamic Island to reveal the expanded view.
+2. Click the **left section** of the expanded view (the Now Playing area).
+
+The Media Controls display:
+
+- Album artwork
+- Song title and artist
+- Animated waveform visualizer
+- Playback progress
+- Previous / Play-Pause / Next controls
+
+## Keyboard Navigation
+
+Luci supports Vim-inspired keyboard navigation in supported views such as the Theme Selector, Wallpaper Selector, and Power Menu.
 
 | Action | Keys |
-| ------- | ---- |
-| Move Left | `H` or `←` |
-| Move Right | `L` or `→` |
-| Move Up | `K` or `↑` |
-| Move Down | `J` or `↓` |
-| Confirm / Apply | `Enter` |
+|--------|------|
+| Move Left | **H** or **←** |
+| Move Right | **L** or **→** |
+| Move Up | **K** or **↑** |
+| Move Down | **J** or **↓** |
+| Confirm / Apply | **Enter** |
+| Close View | **Esc** |
 
-Pressing **Enter** activates the currently selected item. For example:
+Pressing **Enter** activates the currently selected item.
 
-- Apply a theme in the **Theme Selector**
-- Apply a wallpaper in the **Wallpaper Selector**
-- Confirm an action in the **Power Menu**
+For example:
 
-### Mouse Support
+- Apply a theme in the Theme Selector.
+- Apply a wallpaper in the Wallpaper Selector.
+- Confirm an action in the Power Menu.
 
-Luci also supports mouse interaction where appropriate.
+### Closing Media Controls
 
-- Hover over the Dynamic Island to expand it.
-- Click the Dynamic Island to pin or unpin the expanded bar.
-- Scroll or click to browse and apply wallpapers in the **Wallpaper Selector**.
+Closing the Media Controls depends on whether the expanded view is pinned.
 
-> **Note:** Mouse support for the Theme Selector will be added in a future update.
-
-### Closing Views
-
-The Power Menu, Theme Selector, and Wallpaper Selector can be closed in either of the following ways:
+- **If the expanded view is pinned:** moving the cursor away closes the Media Controls and returns to the expanded view.
+- **If the expanded view is not pinned:** moving the cursor away closes the Media Controls and returns to the compact clock.
 
 - Press `Esc`
 - Click anywhere outside the view.
