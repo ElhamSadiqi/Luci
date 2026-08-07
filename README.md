@@ -365,3 +365,9 @@ If you're still experimenting or prefer running it manually, you can launch it a
 ```bash
 qs -c ~/.config/quickshell & disown
 ```
+
+## License
+
+Luci is released under the MIT License.
+
+See the [LICENSE](LICENSE) file for the full license text.
