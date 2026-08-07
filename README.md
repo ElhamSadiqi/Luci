@@ -29,8 +29,11 @@ Luci is developed and tested with:
 - **Quickshell** 0.3.0
 - **Cava** (audio visualizer)
 - **Awww** (wallpaper backend)
+- **hyprsunset** *(optional, used for Night Light support)*
 
 These are the versions currently used during development and testing.
+
+> **Note:** `hyprsunset` is optional. You only need to install it if you plan to use Luci's Night Light controls.
 
 
 ## Installation
@@ -75,17 +78,14 @@ The Dynamic Island, media controls, clock, status indicators, and all core compo
 > This simply provides a cleaner preview of Luci. If your current bar is positioned elsewhere, you can safely ignore this step.
 
 ---
+
 ### 3. Configure Hyprland
 
 Luci does not automatically register Hyprland keybindings.
 
-Views such as the Power Menu, Wallpaper Selector, and Theme Selector are opened through Hyprland using Luci's IPC interface.
+Views such as the Power Menu, Wallpaper Selector, and Theme Selector are opened through Luci's IPC interface.
 
-Add your preferred keybindings to your Hyprland configuration.
-
-#### Opening Luci Views
-
-**Hyprland (.conf)**
+If you use **`hyprland.conf`**, add:
 
 ```ini
 bind = mainMod, P, exec, qs ipc call luci openPowerMenu
@@ -93,7 +93,7 @@ bind = mainMod, W, exec, qs ipc call luci openWallpaperSelector
 bind = mainMod, T, exec, qs ipc call luci openThemeSelector
 ```
 
-**Hyprland (Lua)**
+If you use **`hyprland.lua`**, add:
 
 ```lua
 hl.bind(mainMod .. " + P",
@@ -107,14 +107,13 @@ hl.bind(mainMod .. " + T",
 ```
 
 ---
-
 #### Volume & Brightness Notifications
 
-Luci also displays temporary status notifications whenever your volume or brightness changes.
+Luci displays temporary status notifications whenever your volume or brightness changes.
 
 To enable this, route your multimedia keys through Luci's helper scripts.
 
-**Hyprland (.conf)**
+If you use **`hyprland.conf`**, add:
 
 ```ini
 # Volume
@@ -127,7 +126,7 @@ bindel = , XF86MonBrightnessUp, exec, ~/.config/quickshell/scripts/brightness.sh
 bindel = , XF86MonBrightnessDown, exec, ~/.config/quickshell/scripts/brightness.sh 5%-
 ```
 
-**Hyprland (Lua)**
+If you use **`hyprland.lua`**, add:
 
 ```lua
 hl.bind("XF86AudioRaiseVolume",
@@ -163,13 +162,13 @@ Luci uses **Awww** to apply wallpapers.
 
 If you want the Wallpaper Selector to update your wallpaper, make sure the daemon is running.
 
-**Hyprland (.conf)**
+If you use **`hyprland.conf`**, add:
 
 ```ini
 exec-once = awww-daemon
 ```
 
-**Hyprland (Lua)**
+If you use **`hyprland.lua`**, add:
 
 ```lua
 hl.exec_cmd("awww-daemon")
@@ -281,13 +280,11 @@ When the expanded view is:
 - **Pinned:** it stays open even after moving the mouse away.
 - **Unpinned:** it automatically returns to the compact clock when the cursor leaves the island.
 
-> Clicking buttons or interactive sections (such as Media Controls) does **not** toggle the pinned state.
-
 ---
 
 ## Media Controls
 
-When an MPRIS-compatible media player (such as Firefox, Spotify, MPV, VLC, etc.) is playing media, Luci makes Media Controls available from the expanded view.
+When an MPRIS-compatible media player (such as Firefox, Spotify, VLC, etc.) is playing media, Luci makes Media Controls available from the expanded view.
 
 To open the Media Controls:
 
@@ -323,17 +320,8 @@ For example:
 - Apply a wallpaper in the Wallpaper Selector.
 - Confirm an action in the Power Menu.
 
-### Closing Media Controls
+## Status Notifications
 
-Closing the Media Controls depends on whether the expanded view is pinned.
-
-- **If the expanded view is pinned:** moving the cursor away closes the Media Controls and returns to the expanded view.
-- **If the expanded view is not pinned:** moving the cursor away closes the Media Controls and returns to the compact clock.
-
-- Press `Esc`
-- Click anywhere outside the view.
-
-### Status Notifications
 
 Luci provides temporary notifications whenever your system volume, brightness, or workspace changes.
 
@@ -346,25 +334,33 @@ After a short delay, the notification automatically disappears and Luci returns 
 
 ## Daily Driver
 
-If you've finished testing Luci and would like it to start automatically whenever you log in, you can configure Hyprland to launch it during startup.
+If you've finished testing Luci and would like it to start automatically whenever you log in, configure Hyprland to launch it during startup.
 
-### Hyprland (.conf)
+### If you use `hyprland.conf`, add:
 
 ```ini
 exec-once = qs -c ~/.config/quickshell
 ```
 
-### Hyprland (Lua)
+### If you use `hyprland.lua`, add the following line inside your existing `hyprland.start` callback:
+
+```lua
+hl.exec_cmd("qs -c ~/.config/quickshell")
+```
+
+For example:
 
 ```lua
 hl.on("hyprland.start", function()
+    -- your existing startup commands
+
     hl.exec_cmd("qs -c ~/.config/quickshell")
 end)
 ```
 
 Once configured, Luci will automatically start every time you begin a Hyprland session.
 
-If you're still experimenting or simply prefer running it manually, you can continue launching it whenever you'd like:
+If you're still experimenting or prefer running it manually, you can launch it at any time:
 
 ```bash
 qs -c ~/.config/quickshell & disown
