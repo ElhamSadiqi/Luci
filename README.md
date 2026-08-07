@@ -176,26 +176,72 @@ hl.exec_cmd("awww-daemon")
 
 Without the daemon, the Wallpaper Selector will still display your wallpapers, but selecting one will have no effect.
 
+## Theme Synchronization (Optional)
 
-## Theme Synchronization
+By default, Luci only changes its own appearance.
 
-By default, the Theme Selector only changes Luci's appearance.
+If you want Luci to also update **Hyprland's appearance** (borders, gaps, rounding, blur, shadows, opacity, etc.), your Hyprland configuration **must be modular**.
 
-If you also want it to update your Hyprland window borders, gaps, blur, rounding, and other decoration settings, your Hyprland configuration must be modular.
+Luci cannot modify a single `hyprland.conf` or `hyprland.lua` containing all of your settings.
 
-An example configuration is included in:
+Instead, your main `hyprland.lua` should simply load smaller modules, for example:
 
-```text
-config/hypr/
+```lua
+require("core.monitors")
+require("core.env")
+require("core.appearance")
+require("core.keybinds")
+require("core.programs")
+require("core.input")
+require("core.windows")
+require("core.misc")
+require("core.autostart")
 ```
 
-The example demonstrates how appearance-related settings are separated into dedicated modules and loaded from the currently active theme.
+A complete modular Hyprland configuration is included in:
 
-If your Hyprland configuration consists of a single `hyprland.conf` or `hyprland.lua` with hardcoded values, the Theme Selector cannot update Hyprland automatically.
+```text
+~/.config/quickshell/config/hypr/
+```
 
-Luci itself will continue to change themes normally—the synchronization only affects Hyprland's appearance.
+If you don't already have a modular setup, simply move it to:
 
-If you prefer to manage your Hyprland theme manually, you can safely ignore this integration.
+```text
+~/.config/hypr/
+```
+
+and reload Hyprland:
+
+```bash
+hyprctl reload
+```
+
+### First Theme Switch
+
+The first time you switch a theme from Luci, it automatically creates:
+
+```text
+~/.config/hypr/current-theme/theme.lua
+```
+
+This file is a symbolic link pointing to the currently selected theme.
+
+Until this first theme switch happens, Hyprland may report an error because `current-theme/theme.lua` does not yet exist.
+
+This is expected.
+
+Simply open the Theme Selector and switch to any theme once. Luci will automatically create the required symbolic link and the error will disappear.
+
+After that, every theme change will automatically update Hyprland's appearance.
+
+> **Note**
+>
+> The `~/.config/quickshell/config/hypr/` directory is only an example configuration included with Luci.
+>
+> If you already have your own modular Hyprland setup, you can ignore it and integrate Luci however you prefer.
+>
+> If you're new to Hyprland or don't yet have a modular configuration, the provided files are intended as a complete starting point that you can copy into `~/.config/hypr/` and customize (animations, keybindings, layouts, plugins, etc.).
+
 
 ## Wallpaper Selector
 
