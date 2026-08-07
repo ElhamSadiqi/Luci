@@ -15,9 +15,11 @@ QtObject {
     property int mode: defaultMode
 
     property bool islandPinned: false
-    property bool returnToPinnedExpanded: false
+    property bool returnToExpanded: false
 
     property bool mediaPinned: false
+
+    property bool ignoreNextIslandTap: false
 
     function setMode(newMode) {
         mode = newMode
@@ -25,12 +27,13 @@ QtObject {
 
     function reset() {
         mediaPinned = false
+        ignoreNextIslandTap = false
+        islandPinned = false
         mode = defaultMode
     }
 
     readonly property bool modal:
         mode === powerMenuMode ||
-        mode === controlCenterMode ||
         mode === themeSelectorMode ||
         mode === wallpaperSelectorMode
 

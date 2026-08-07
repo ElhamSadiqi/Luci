@@ -1,4 +1,10 @@
+pragma Singleton
+
 import QtQuick
+
+// =========================================================
+// GRUVBOX
+// =========================================================
 
 QtObject {
 
@@ -8,13 +14,12 @@ QtObject {
 
     property color background: "#282828"
     property color surface: "#32302F"
+    property color surfaceVariant: "#3C3836"
     property color card: "#3C3836"
 
     // =========================================================
     // OVERLAYS
     // =========================================================
-
-    property color overlay: "#00000055"
 
     property color overlayLight: "#FFFFFF08"
     property color overlayMedium: "#00000033"
@@ -32,8 +37,9 @@ QtObject {
     // ICONS
     // =========================================================
 
-    property color icon: textSecondary
-    property color iconActive: accent
+    property color icon: "#D5C4A1"
+    property color iconActive: "#EBDBB2"
+    property color iconDisabled: "#928374"
 
     // =========================================================
     // ACCENT
@@ -48,6 +54,7 @@ QtObject {
     // =========================================================
 
     property color border: "#504945"
+    property color borderHover: "#665C54"
     property color borderSelected: accent
     property color borderSubtle: "#FFFFFF15"
 
@@ -55,36 +62,64 @@ QtObject {
     // BUTTONS
     // =========================================================
 
-    property color buttonBackground: card
+    property color buttonBackground: "#3C3836"
     property color buttonHover: "#4A4642"
+    property color buttonPressed: "#504945"
     property color buttonSelected: accent
     property color buttonText: textPrimary
 
-    // =========================================================
-    // PREVIEW CARDS
-    // =========================================================
-
-    property color previewBackground: card
-    property color previewText: textPrimary
+    // Control Center
+    property color controlButtonHover: "#504945"
 
     // =========================================================
-    // WALLPAPER
+    // DESTRUCTIVE ACTIONS
     // =========================================================
 
-    property color wallpaperOverlay: overlay
-    property color wallpaperSelection: accent
+    property color danger: "#FB4934"
+    property color dangerHover: "#CC241D"
+    property color warning: "#FABD2F"
+    property color success: "#B8BB26"
 
     // =========================================================
-    // POWER
+    // INPUTS / SLIDERS
     // =========================================================
 
-    property color powerDanger: "#FB4934"
-    property color powerWarning: "#FABD2F"
+    property color sliderBackground: "#3C3836"
+    property color sliderFill: accent
+    property color inputBackground: "#3C3836"
+    property color inputBorder: border
 
     // =========================================================
-    // PROGRESS
+    // NOTIFICATIONS
+    // =========================================================
+
+    property color notificationBackground: card
+    property color notificationUnread: surfaceVariant
+
+    // =========================================================
+    // MEDIA
     // =========================================================
 
     property color progress: accent
-    property color progressBackground: border
+    property color progressBackground: "#504945"
+
+    // =========================================================
+    // WALLPAPER SELECTOR
+    // =========================================================
+
+    property color wallpaperOverlay: overlayStrong
+    property color wallpaperSelection: accent
+
+    // =========================================================
+    // POWER MENU
+    // =========================================================
+
+    property color powerDanger: danger
+    property color powerWarning: warning
+
+    // =========================================================
+    // FONTS
+    // =========================================================
+
+    property string iconFont: "JetBrainsMono Nerd Font"
 }

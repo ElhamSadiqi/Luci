@@ -34,7 +34,9 @@ Item {
 
             event.accepted = true
 
-            IslandManager.returnToPinnedExpanded =
+            IslandManager.ignoreNextIslandTap = false
+
+            IslandManager.returnToExpanded =
                 IslandManager.islandPinned
 
             IslandManager.islandPinned = false

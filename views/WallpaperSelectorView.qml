@@ -107,6 +107,8 @@ FocusScope {
 
                     anchors.fill: parent
 
+                    cursorShape: Qt.PointingHandCursor
+
                     onClicked: {
 
                         wallpaperView.currentIndex = index
@@ -120,17 +122,6 @@ FocusScope {
 
                 policy: ScrollBar.AsNeeded
             }
-
-            onCurrentIndexChanged: {
-
-                Qt.callLater(function() {
-
-                    wallpaperView.positionViewAtIndex(
-                        currentIndex,
-                        GridView.Center
-                    )
-                })
-            }
         }
 
         Row {
@@ -141,7 +132,7 @@ FocusScope {
 
             Rectangle {
 
-                width: 110
+                width: 145
                 height: 36
 
                 radius: 12
@@ -157,6 +148,8 @@ FocusScope {
 
                     anchors.fill: parent
 
+                    cursorShape: Qt.PointingHandCursor
+
                     onClicked: {
 
                         WallpaperService.setFilter(true)
@@ -171,7 +164,7 @@ FocusScope {
 
                     anchors.centerIn: parent
 
-                    text: "Theme"
+                    text: "Theme Wallpapers"
 
                     color: WallpaperService.themeOnly
                         ? Theme.buttonText
@@ -199,6 +192,8 @@ FocusScope {
                 MouseArea {
 
                     anchors.fill: parent
+
+                    cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
 

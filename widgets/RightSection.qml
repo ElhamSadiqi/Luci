@@ -1,12 +1,13 @@
 import QtQuick
+
 import "../styles"
 import "../status"
 import "../managers"
+import "../services"
 
 Item {
 
     property Item batteryService
-    property Item wifiService
 
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
@@ -36,6 +37,35 @@ Item {
             implicitWidth: icons.implicitWidth + 18
             implicitHeight: icons.implicitHeight + 10
 
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
+
+            TapHandler {
+
+                acceptedButtons: Qt.LeftButton
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+
+                onTapped: function(event) {
+
+                    event.accepted = true
+
+                    if (
+                        IslandManager.mode === IslandManager.controlCenterMode
+                    )
+                        return
+
+                    IslandManager.returnToExpanded =
+                        IslandManager.islandPinned
+
+                    IslandManager.islandPinned = false
+
+                    IslandManager.setMode(
+                        IslandManager.controlCenterMode
+                    )
+                }
+            }
+
             Row {
                 id: icons
 
@@ -44,10 +74,7 @@ Item {
                 spacing: 14
 
                 Text {
-                    text: wifiService
-                        ? wifiService.icon
-                        : "󰤮"
-
+                    text: WifiService.icon
                     color: Theme.icon
 
                     font.family: "JetBrainsMono Nerd Font"

@@ -10,6 +10,7 @@ Rectangle {
 
     property int powerSelection: 0
 
+
     Component.onCompleted: {
         ThemeService.initialize()
     }
@@ -62,8 +63,8 @@ Rectangle {
 
         case IslandManager.expandedMode:
         case IslandManager.powerMenuMode:
-        case IslandManager.controlCenterMode:
         case IslandManager.mediaControlsMode:
+        case IslandManager.controlCenterMode:
             return 520
 
         case IslandManager.themeSelectorMode:
@@ -83,7 +84,6 @@ Rectangle {
 
         case IslandManager.expandedMode:
         case IslandManager.powerMenuMode:
-        case IslandManager.controlCenterMode:
             return 75
 
         case IslandManager.themeSelectorMode:
@@ -91,6 +91,9 @@ Rectangle {
 
         case IslandManager.wallpaperSelectorMode:
             return 480
+
+        case IslandManager.controlCenterMode:
+            return 530
 
         case IslandManager.mediaControlsMode:
             return 130
@@ -130,7 +133,8 @@ Rectangle {
                 collapseTimer.stop()
 
                 if (
-                    IslandManager.mode === IslandManager.mediaControlsMode &&
+                    (IslandManager.mode === IslandManager.mediaControlsMode ||
+                    IslandManager.mode === IslandManager.controlCenterMode) &&
                     IslandManager.islandPinned
                 )
                     return
@@ -138,7 +142,19 @@ Rectangle {
                 expandTimer.restart()
 
             } else {
+
                 expandTimer.stop()
+
+                if (
+                    IslandManager.mode === IslandManager.mediaControlsMode ||
+                    IslandManager.mode === IslandManager.controlCenterMode
+                ) {
+
+                    if (!IslandManager.islandPinned)
+                        collapseTimer.restart()
+
+                    return
+                }
 
                 if (!IslandManager.islandPinned)
                     collapseTimer.restart()
@@ -154,6 +170,22 @@ Rectangle {
             if (IslandManager.modal)
                 return
 
+            if (IslandManager.mode === IslandManager.controlCenterMode)
+                return
+
+            if (
+                IslandManager.ignoreNextIslandTap &&
+                IslandManager.mode === IslandManager.mediaControlsMode
+            ) {
+
+                IslandManager.ignoreNextIslandTap = false
+
+                expandTimer.stop()
+                collapseTimer.stop()
+
+                return
+            }
+
             IslandManager.islandPinned =
                 !IslandManager.islandPinned
 
@@ -162,7 +194,10 @@ Rectangle {
                 expandTimer.stop()
                 collapseTimer.stop()
 
-                if (IslandManager.mode !== IslandManager.mediaControlsMode) {
+                if (
+                    IslandManager.mode !==
+                    IslandManager.mediaControlsMode
+                ) {
 
                     IslandManager.setMode(
                         IslandManager.expandedMode
@@ -208,17 +243,17 @@ Rectangle {
 
         onTriggered: {
 
-          if (
-                IslandManager.mode ===
-                IslandManager.mediaControlsMode
+            if (
+                IslandManager.mode === IslandManager.mediaControlsMode ||
+                IslandManager.mode === IslandManager.controlCenterMode
             ) {
 
                 if (
-                    IslandManager.returnToPinnedExpanded
+                    IslandManager.returnToExpanded
                 ) {
 
                     IslandManager.islandPinned = true
-                    IslandManager.returnToPinnedExpanded = false
+                    IslandManager.returnToExpanded = false
 
                     IslandManager.setMode(
                         IslandManager.expandedMode
@@ -362,7 +397,7 @@ Rectangle {
     Component {
         id: controlCenterView
 
-        Item { }
+        ControlCenterView { }
     }
 
     Component {

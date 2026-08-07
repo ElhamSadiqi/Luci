@@ -1,10 +1,12 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "../services"
 import "../managers"
 
 Item {
     id: root
+
 
     FileView {
         id: eventFile

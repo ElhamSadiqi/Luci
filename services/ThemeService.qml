@@ -273,42 +273,69 @@ Singleton {
         process.running = true
     }
 
-
     function applyTheme(themeObject) {
 
-        Theme.background = themeObject.background
-        Theme.surface = themeObject.surface
-        Theme.card = themeObject.card
-        Theme.overlay = themeObject.overlay
+        const themeProperties = [
+            "background",
+            "surface",
+            "surfaceVariant",
+            "card",
 
-        Theme.textPrimary = themeObject.textPrimary
-        Theme.textSecondary = themeObject.textSecondary
-        Theme.textMuted = themeObject.textMuted
+            "overlayLight",
+            "overlayMedium",
+            "overlayStrong",
 
-        Theme.icon = themeObject.icon
-        Theme.iconActive = themeObject.iconActive
+            "textPrimary",
+            "textSecondary",
+            "textMuted",
 
-        Theme.accent = themeObject.accent
-        Theme.accentHover = themeObject.accentHover
-        Theme.accentPressed = themeObject.accentPressed
+            "icon",
+            "iconActive",
+            "iconDisabled",
 
-        Theme.border = themeObject.border
-        Theme.borderSelected = themeObject.borderSelected
+            "accent",
+            "accentHover",
+            "accentPressed",
 
-        Theme.buttonBackground = themeObject.buttonBackground
-        Theme.buttonHover = themeObject.buttonHover
-        Theme.buttonSelected = themeObject.buttonSelected
-        Theme.buttonText = themeObject.buttonText
+            "border",
+            "borderHover",
+            "borderSelected",
+            "borderSubtle",
 
-        Theme.wallpaperOverlay = themeObject.wallpaperOverlay
-        Theme.wallpaperSelection = themeObject.wallpaperSelection
+            "buttonBackground",
+            "buttonHover",
+            "buttonPressed",
+            "buttonSelected",
+            "buttonText",
+            "controlButtonHover",
 
-        Theme.powerDanger = themeObject.powerDanger
-        Theme.powerWarning = themeObject.powerWarning
+            "danger",
+            "dangerHover",
+            "warning",
+            "success",
 
-        Theme.progress = themeObject.progress
-        Theme.progressBackground = themeObject.progressBackground
+            "sliderBackground",
+            "sliderFill",
+            "inputBackground",
+            "inputBorder",
 
+            "notificationBackground",
+            "notificationUnread",
+
+            "progress",
+            "progressBackground",
+
+            "wallpaperOverlay",
+            "wallpaperSelection",
+
+            "powerDanger",
+            "powerWarning",
+
+            "iconFont"
+        ]
+
+        for (const key of themeProperties)
+            Theme[key] = themeObject[key]
     }
 
     Process {

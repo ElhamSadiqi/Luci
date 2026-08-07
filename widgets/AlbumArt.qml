@@ -1,24 +1,21 @@
 import QtQuick
+import Quickshell.Widgets
 import "../styles"
 import "../services"
 
-Rectangle {
+ClippingRectangle {
     id: root
 
-    width: 36
-    height: 36
+    width: 40
+    height: 40
     radius: 8
-
     color: Theme.surface
-    clip: true
 
     property string currentArt: ""
-
     property bool artworkReady: false
 
     Connections {
         target: MediaService
-
         function onArtUrlChanged() {
             root.currentArt = MediaService.artUrl
         }
@@ -28,13 +25,10 @@ Rectangle {
         id: artwork
 
         anchors.fill: parent
-
         source: root.currentArt
-
         asynchronous: true
         cache: true
         smooth: true
-
         fillMode: Image.PreserveAspectCrop
 
         onStatusChanged: {
@@ -52,13 +46,9 @@ Rectangle {
 
     Text {
         anchors.centerIn: parent
-
         visible: !root.artworkReady
-
         text: "♪"
-
         font.pixelSize: 16
-
         color: Theme.textPrimary
     }
 

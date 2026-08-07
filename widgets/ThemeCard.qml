@@ -5,6 +5,7 @@ Rectangle {
     id: root
 
     property string themeName: ""
+    property string themeId: ""
 
     property color backgroundColor: Theme.previewBackground
 
@@ -94,22 +95,5 @@ Rectangle {
 
             font.bold: true
         }
-    }
-
-    // Selection overlay
-
-    Rectangle {
-
-        anchors.fill: parent
-
-        radius: parent.radius
-
-        visible: selected
-
-        color: Theme.overlayMedium
-
-        border.width: 2
-
-        border.color: Theme.accent
     }
 }

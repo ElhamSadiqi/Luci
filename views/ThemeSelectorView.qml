@@ -1,4 +1,6 @@
 import QtQuick
+import Qt.labs.folderlistmodel
+import QtQuick.Controls 2.15
 
 import "../widgets"
 import "../managers"
@@ -57,57 +59,76 @@ FocusScope {
             }
         }
 
-        Flickable {
+        GridView {
 
-            id: themeArea
+            id: themeView
 
             width: parent.width
-
             height: 340
+
+            contentItem.x: 15
 
             clip: true
 
-            interactive: false
+            interactive: true
 
             boundsBehavior: Flickable.StopAtBounds
 
-            contentWidth: themeGrid.width
+            cellWidth: (width - 32) / root.columns
+            cellHeight: 116
 
-            contentHeight: themeGrid.height
+            model: ThemeService.themes
 
-            Grid {
+            currentIndex: root.selectedIndex
 
-                id: themeGrid
+            delegate: Item {
 
-                anchors.left: parent.left
+                width: themeView.cellWidth
+                height: themeView.cellHeight
 
-                anchors.leftMargin: 10
 
-                columns: root.columns
+                ThemeCard {
 
-                spacing: 16
+                    anchors.fill: parent
 
-                Repeater {
+                    anchors.margins: 8
 
-                    model: ThemeService.themes
+                    themeId: model.themeId
 
-                    ThemeCard {
+                    themeName: model.name
 
-                        themeName: model.name
+                    backgroundColor: model.background
 
-                        backgroundColor: model.background
+                    color1: model.color1
+                    color2: model.color2
+                    color3: model.color3
 
-                        color1: model.color1
-                        color2: model.color2
-                        color3: model.color3
+                    accentColor: model.accent
 
-                        accentColor: model.accent
+                    textColor: model.text
 
-                        textColor: model.text
+                    selected: index === themeView.currentIndex
+                }
 
-                        selected: index === root.selectedIndex
+
+                MouseArea {
+
+                    anchors.fill: parent
+
+                    cursorShape: Qt.PointingHandCursor
+
+                    onClicked: {
+
+                        themeView.currentIndex = index
+
+                        ThemeService.apply(model.themeId)
+
                     }
                 }
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
             }
         }
     }
@@ -176,30 +197,5 @@ FocusScope {
             event.accepted = true
             break
         }
-
-        // ======================================
-        // Keep selected theme visible
-        // ======================================
-
-        Qt.callLater(function() {
-
-            var row = Math.floor(selectedIndex / columns)
-
-            var cardHeight = 114
-
-            var y = row * cardHeight
-
-            if (y < themeArea.contentY)
-
-                themeArea.contentY = y
-
-            else if (
-                y + cardHeight >
-                themeArea.contentY + themeArea.height
-            )
-
-                themeArea.contentY =
-                    y + cardHeight - themeArea.height
-        })
     }
 }

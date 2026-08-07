@@ -7,12 +7,9 @@ Item {
     implicitWidth: 520
     implicitHeight: 75
 
+
     BatteryService {
         id: batteryService
-    }
-
-    WifiService {
-        id: wifiService
     }
 
     Row {
@@ -22,7 +19,6 @@ Item {
         anchors.rightMargin: 14
 
         spacing: 0
-
 
         LeftSection {
             width: 130
@@ -48,7 +44,6 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             batteryService: batteryService
-            wifiService: wifiService
         }
     }
 }

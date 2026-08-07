@@ -18,6 +18,13 @@ Singleton {
     property int position: 0
     property int length: 0
 
+    property url icon: Qt.resolvedUrl("../assets/icons/music.svg")
+
+    property string subtitle:
+        hasPlayer
+            ? title
+            : "Nothing Playing"
+
     readonly property bool hasPlayer: player !== null
 
     readonly property int playbackPlaying: 1

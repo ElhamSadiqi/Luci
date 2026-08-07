@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import "../widgets"
 import "../services"
@@ -44,15 +45,15 @@ Item {
 
                     color: Theme.surface
 
-                    Image {
+                    SvgIcon {
+
                         anchors.centerIn: parent
 
-                        width: 18
-                        height: 18
+                        size: 18
 
                         source: "../assets/icons/player-skip-back.svg"
 
-                        fillMode: Image.PreserveAspectFit
+                        color: Theme.textPrimary
                     }
 
                     HoverHandler {
@@ -73,18 +74,18 @@ Item {
 
                     color: Theme.accent
 
-                    Image {
+                    SvgIcon {
+
                         anchors.centerIn: parent
 
-                        width: 20
-                        height: 20
+                        size: 20
 
                         source:
                             MediaService.isPlaying
                                 ? "../assets/icons/player-pause.svg"
                                 : "../assets/icons/player-play.svg"
 
-                        fillMode: Image.PreserveAspectFit
+                        color: Theme.background
                     }
 
                     HoverHandler {
@@ -109,15 +110,15 @@ Item {
 
                     color:  Theme.surface
 
-                    Image {
+                    SvgIcon {
+
                         anchors.centerIn: parent
 
-                        width: 18
-                        height: 18
+                        size: 18
 
                         source: "../assets/icons/player-skip-forward.svg"
 
-                        fillMode: Image.PreserveAspectFit
+                        color: Theme.textPrimary
                     }
 
                     HoverHandler {

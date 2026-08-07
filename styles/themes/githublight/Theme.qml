@@ -1,4 +1,10 @@
+pragma Singleton
+
 import QtQuick
+
+// =========================================================
+// GITHUB LIGHT
+// =========================================================
 
 QtObject {
 
@@ -8,13 +14,12 @@ QtObject {
 
     property color background: "#FFFFFF"
     property color surface: "#F6F8FA"
+    property color surfaceVariant: "#EEF2F6"
     property color card: "#EEF2F6"
 
     // =========================================================
     // OVERLAYS
     // =========================================================
-
-    property color overlay: "#FFFFFF66"
 
     property color overlayLight: "#00000008"
     property color overlayMedium: "#00000018"
@@ -32,8 +37,9 @@ QtObject {
     // ICONS
     // =========================================================
 
-    property color icon: textSecondary
-    property color iconActive: accent
+    property color icon: "#57606A"
+    property color iconActive: "#0969DA"
+    property color iconDisabled: "#8C959F"
 
     // =========================================================
     // ACCENT
@@ -48,6 +54,7 @@ QtObject {
     // =========================================================
 
     property color border: "#D0D7DE"
+    property color borderHover: "#8C959F"
     property color borderSelected: accent
     property color borderSubtle: "#00000012"
 
@@ -55,36 +62,62 @@ QtObject {
     // BUTTONS
     // =========================================================
 
-    property color buttonBackground: card
-    property color buttonHover: "#E2E8F0"
+    property color buttonBackground: "#EEF2F6"
+    property color buttonHover: "#D8DEE4"
+    property color buttonPressed: "#BCC6D0"
     property color buttonSelected: accent
     property color buttonText: textPrimary
+    property color controlButtonHover: "#D8DEE4"
 
     // =========================================================
-    // PREVIEW CARDS
+    // DESTRUCTIVE ACTIONS
     // =========================================================
 
-    property color previewBackground: card
-    property color previewText: textPrimary
+    property color danger: "#CF222E"
+    property color dangerHover: "#A40E26"
+    property color warning: "#BF8700"
+    property color success: "#1A7F37"
 
     // =========================================================
-    // WALLPAPER
+    // INPUTS / SLIDERS
     // =========================================================
 
-    property color wallpaperOverlay: overlay
-    property color wallpaperSelection: accent
+    property color sliderBackground: "#D8DEE4"
+    property color sliderFill: accent
+    property color inputBackground: "#FFFFFF"
+    property color inputBorder: border
 
     // =========================================================
-    // POWER
+    // NOTIFICATIONS
     // =========================================================
 
-    property color powerDanger: "#CF222E"
-    property color powerWarning: "#BF8700"
+    property color notificationBackground: card
+    property color notificationUnread: surfaceVariant
 
     // =========================================================
-    // PROGRESS
+    // MEDIA
     // =========================================================
 
     property color progress: accent
     property color progressBackground: border
+
+    // =========================================================
+    // WALLPAPER SELECTOR
+    // =========================================================
+
+    property color wallpaperOverlay: overlayStrong
+    property color wallpaperSelection: accent
+
+    // =========================================================
+    // POWER MENU
+    // =========================================================
+
+    property color powerDanger: danger
+    property color powerWarning: warning
+
+    // =========================================================
+    // FONTS
+    // =========================================================
+
+    property string iconFont: "JetBrainsMono Nerd Font"
 }

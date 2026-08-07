@@ -1,4 +1,10 @@
+pragma Singleton
+
 import QtQuick
+
+// =========================================================
+// SOLARIZED
+// =========================================================
 
 QtObject {
 
@@ -8,13 +14,12 @@ QtObject {
 
     property color background: "#002B36"
     property color surface: "#073642"
+    property color surfaceVariant: "#0B3B49"
     property color card: "#0B3B49"
 
     // =========================================================
     // OVERLAYS
     // =========================================================
-
-    property color overlay: "#00000055"
 
     property color overlayLight: "#FFFFFF08"
     property color overlayMedium: "#FFFFFF12"
@@ -32,8 +37,9 @@ QtObject {
     // ICONS
     // =========================================================
 
-    property color icon: textSecondary
-    property color iconActive: accent
+    property color icon: "#93A1A1"
+    property color iconActive: "#EEE8D5"
+    property color iconDisabled: "#657B83"
 
     // =========================================================
     // ACCENT
@@ -48,6 +54,7 @@ QtObject {
     // =========================================================
 
     property color border: "#586E75"
+    property color borderHover: "#6D848B"
     property color borderSelected: accent
     property color borderSubtle: "#FFFFFF14"
 
@@ -55,36 +62,62 @@ QtObject {
     // BUTTONS
     // =========================================================
 
-    property color buttonBackground: card
+    property color buttonBackground: "#0B3B49"
     property color buttonHover: "#14505E"
+    property color buttonPressed: "#586E75"
     property color buttonSelected: accent
     property color buttonText: textPrimary
+    property color controlButtonHover: "#14505E"
 
     // =========================================================
-    // PREVIEW CARDS
+    // DESTRUCTIVE ACTIONS
     // =========================================================
 
-    property color previewBackground: card
-    property color previewText: textPrimary
+    property color danger: "#DC322F"
+    property color dangerHover: "#C72C29"
+    property color warning: "#B58900"
+    property color success: "#859900"
 
     // =========================================================
-    // WALLPAPER
+    // INPUTS / SLIDERS
     // =========================================================
 
-    property color wallpaperOverlay: overlay
-    property color wallpaperSelection: accent
+    property color sliderBackground: "#0B3B49"
+    property color sliderFill: accent
+    property color inputBackground: "#0B3B49"
+    property color inputBorder: border
 
     // =========================================================
-    // POWER
+    // NOTIFICATIONS
     // =========================================================
 
-    property color powerDanger: "#DC322F"
-    property color powerWarning: "#B58900"
+    property color notificationBackground: card
+    property color notificationUnread: surfaceVariant
 
     // =========================================================
-    // PROGRESS
+    // MEDIA
     // =========================================================
 
     property color progress: accent
-    property color progressBackground: border
+    property color progressBackground: "#586E75"
+
+    // =========================================================
+    // WALLPAPER SELECTOR
+    // =========================================================
+
+    property color wallpaperOverlay: overlayStrong
+    property color wallpaperSelection: accent
+
+    // =========================================================
+    // POWER MENU
+    // =========================================================
+
+    property color powerDanger: danger
+    property color powerWarning: warning
+
+    // =========================================================
+    // FONTS
+    // =========================================================
+
+    property string iconFont: "JetBrainsMono Nerd Font"
 }
