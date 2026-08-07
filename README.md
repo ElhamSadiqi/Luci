@@ -255,7 +255,7 @@ Simply copy your wallpapers into this directory and they'll automatically appear
 
 ### Theme Wallpapers
 
-The **Theme Theme Wallpapers** button is designed to make choosing wallpapers easier.
+The **Theme Wallpapers** button is designed to make choosing wallpapers easier.
 
 Not every wallpaper matches every color palette, so Luci allows each theme to have its own wallpaper collection. Instead of browsing every wallpaper on your system, the **Theme Wallpapers** button only shows wallpapers assigned to the currently selected theme.
 
